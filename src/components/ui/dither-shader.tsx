@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useRef, useCallback, useState } from "react";
-import { cn } from "@/lib/utils";
 
 type DitheringMode = "bayer" | "halftone" | "noise" | "crosshatch";
 type ColorMode = "original" | "grayscale" | "duotone" | "custom";
@@ -446,7 +445,10 @@ export const DitherShader: React.FC<DitherShaderProps> = ({
   }, [src, dimensions, objectFit, animated, animationSpeed, applyDithering]);
 
   return (
-    <div ref={containerRef} className={cn("relative h-full w-full", className)}>
+    <div
+      ref={containerRef}
+      className={["relative h-full w-full", className].filter(Boolean).join(" ")}
+    >
       <canvas
         ref={canvasRef}
         className="absolute inset-0 h-full w-full"

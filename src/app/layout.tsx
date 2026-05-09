@@ -1,18 +1,14 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { displayFont, sansFont } from "@/lib/fonts";
 
 import "./globals.css";
 
-const geistSans = Geist({
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
   title: {
-    default: "Your Name",
-    template: "%s · Your Name",
+    default: "Omansh Bainsla",
+    template: "%s · Omansh Bainsla",
   },
-  description: "Personal website — projects, writing, and contact.",
+  description: "Software engineer based in San Francisco, CA.",
 };
 
 export default function RootLayout({
@@ -22,7 +18,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.className} min-h-screen antialiased`}>
+      <body
+        className={`${sansFont.variable} ${displayFont.variable} min-h-screen antialiased`}
+      >
         {children}
       </body>
     </html>

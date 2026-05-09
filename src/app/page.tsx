@@ -1,9 +1,15 @@
-import DitherShaderDemo from "@/components/ui/dither-shader-demo";
+import { BackgroundReadingGradient } from "@/components/background-reading-gradient";
+import { HomeHero } from "@/components/home-hero";
+import { SocialLinks } from "@/components/social-links";
+import HomeDitherBackground from "@/components/ui/home-dither-background";
 
 export default function HomePage() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center">
-      <DitherShaderDemo />
-    </div>
+    <>
+      <HomeDitherBackground />
+      <BackgroundReadingGradient />
+      <SocialLinks />
+      <HomeHero />
+    </>
   );
 }
