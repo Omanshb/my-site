@@ -14,3 +14,12 @@ body {
 .font-display {
   font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
 }
+
+.font-hero {
+  font-family: var(--font-hero), var(--font-display), var(--font-sans),
+    system-ui, sans-serif;
+}
+
+.font-nav {
+  font-family: var(--font-nav), var(--font-sans), system-ui, sans-serif;
+}

@@ -40,6 +40,10 @@ interface DitherShaderProps {
   animationSpeed?: number;
   /** Additional CSS classes for the container (use this to set size via Tailwind) */
   className?: string;
+  /** Additional CSS classes for the canvas element */
+  canvasClassName?: string;
+  /** Called after the first successful dither render */
+  onReady?: () => void;
 }
 
 // 4x4 Bayer matrix for ordered dithering
@@ -111,6 +115,8 @@ export const DitherShader: React.FC<DitherShaderProps> = ({
   animated = false,
   animationSpeed = 0.02,
   className,
+  canvasClassName,
+  onReady,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -403,6 +409,7 @@ export const DitherShader: React.FC<DitherShaderProps> = ({
 
       // Initial render
       applyDithering(ctx, displayWidth, displayHeight, 0);
+      onReady?.();
 
       // Setup animation if enabled
       if (animated) {
@@ -442,7 +449,7 @@ export const DitherShader: React.FC<DitherShaderProps> = ({
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [src, dimensions, objectFit, animated, animationSpeed, applyDithering]);
+  }, [src, dimensions, objectFit, animated, animationSpeed, applyDithering, onReady]);
 
   return (
     <div
@@ -451,7 +458,9 @@ export const DitherShader: React.FC<DitherShaderProps> = ({
     >
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 h-full w-full"
+        className={["absolute inset-0 h-full w-full", canvasClassName]
+          .filter(Boolean)
+          .join(" ")}
         style={{ imageRendering: "pixelated" }}
         aria-label="Dithered image"
         role="img"
