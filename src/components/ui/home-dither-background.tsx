@@ -2,9 +2,15 @@
 
 import { DitherShader } from "@/components/ui/dither-shader";
 
-export default function HomeDitherBackground() {
+interface HomeDitherBackgroundProps {
+  onReady?: () => void;
+}
+
+export default function HomeDitherBackground({
+  onReady,
+}: HomeDitherBackgroundProps) {
   return (
-    <div className="fixed inset-0" aria-hidden>
+    <div className="fixed inset-0 overflow-hidden" aria-hidden>
       <DitherShader
         src="/media/images/cityskyline.jpeg"
         gridSize={3}
@@ -16,6 +22,9 @@ export default function HomeDitherBackground() {
         secondaryColor="#f5f5f5"
         objectFit="cover"
         className="h-full w-full"
+        onReady={() => {
+          onReady?.();
+        }}
       />
     </div>
   );

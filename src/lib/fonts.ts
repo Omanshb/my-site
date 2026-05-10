@@ -1,4 +1,4 @@
-import { Geist } from "next/font/google";
+import { Geist, Inter_Tight } from "next/font/google";
 import localFont from "next/font/local";
 
 export const sansFont = Geist({
@@ -21,5 +21,24 @@ export const displayFont = localFont({
     },
   ],
   variable: "--font-display",
+  display: "swap",
+});
+
+export const heroFont = localFont({
+  src: [
+    {
+      path: "../../public/fonts/lastik/InstrumentSerif-Regular.ttf",
+      weight: "400",
+      style: "normal",
+    },
+  ],
+  variable: "--font-hero",
+  display: "swap",
+});
+
+export const navFont = Inter_Tight({
+  subsets: ["latin"],
+  weight: ["500"],
+  variable: "--font-nav",
   display: "swap",
 });

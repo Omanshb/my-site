@@ -13,7 +13,7 @@ const linkClassName =
 /** Fixed box so every logo sits at the same optical size (avoids baseline / bbox drift). */
 function IconBox({ children }: { children: ReactNode }) {
   return (
-    <span className="flex h-[22px] w-[22px] shrink-0 items-center justify-center">
+    <span className="flex h-[19px] w-[19px] shrink-0 items-center justify-center">
       {children}
     </span>
   );
@@ -22,7 +22,7 @@ function IconBox({ children }: { children: ReactNode }) {
 export function SocialLinks() {
   return (
     <nav
-      className="fixed left-0 top-0 z-20 flex items-center gap-6 p-5"
+      className="fixed left-6 top-4 z-20 flex h-7 items-center gap-5 md:left-8 md:top-6 md:gap-6"
       aria-label="Social links"
     >
       <a

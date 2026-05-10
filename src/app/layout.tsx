@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { displayFont, sansFont } from "@/lib/fonts";
+import { displayFont, heroFont, navFont, sansFont } from "@/lib/fonts";
 
 import "./globals.css";
 
@@ -18,8 +18,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="preload" as="image" href="/media/images/cityskyline.jpeg" />
+      </head>
       <body
-        className={`${sansFont.variable} ${displayFont.variable} min-h-screen antialiased`}
+        className={`${sansFont.variable} ${displayFont.variable} ${heroFont.variable} ${navFont.variable} min-h-screen antialiased`}
       >
         {children}
       </body>
