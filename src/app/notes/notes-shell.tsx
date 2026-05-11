@@ -9,12 +9,17 @@ type NotesSection = "writings" | "readings" | "thoughts";
 type NotesShellProps = {
   activeSection: NotesSection;
   children: ReactNode;
+  contentClassName?: string;
 };
 
 const linkClassName =
   "text-white underline decoration-white/90 underline-offset-4 transition-opacity duration-200 hover:opacity-85";
 
-export function NotesShell({ activeSection, children }: NotesShellProps) {
+export function NotesShell({
+  activeSection,
+  children,
+  contentClassName = "pt-10",
+}: NotesShellProps) {
   return (
     <div className="min-h-screen bg-black text-white">
       <SocialLinks />
@@ -58,7 +63,7 @@ export function NotesShell({ activeSection, children }: NotesShellProps) {
             <span className="text-white/45">.</span>
           </p>
         </header>
-        <div className="pt-10">{children}</div>
+        <div className={contentClassName}>{children}</div>
       </main>
     </div>
   );

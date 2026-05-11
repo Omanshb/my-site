@@ -4,7 +4,9 @@ export type WritingItem = {
   description: string;
   date: string;
   href: string;
-  coverGradient: string;
+  coverImage?: string;
+  coverZoomClassName?: string;
+  coverDither?: boolean;
 };
 
 export type ReadingItem = {
@@ -20,13 +22,22 @@ export type ThoughtItem = {
 
 export const WRITINGS: WritingItem[] = [
   {
+    entry: "Entry 5",
+    title: "Leaving the Sandbox",
+    description:
+      "What now?",
+    date: "05.15.2026",
+    href: "#",
+    coverImage: "/blog_covers/leavingthesandbox.png",
+    coverZoomClassName: "scale-[1.03]",
+    coverDither: true,
+  },
+  {
     entry: "Entry 4",
     title: "Forward Projections",
     description: "Building things with a longer memory.",
     date: "Coming soon",
     href: "#",
-    coverGradient:
-      "linear-gradient(145deg, rgba(104, 160, 227, 0.9) 0%, rgba(54, 94, 140, 0.8) 45%, rgba(19, 30, 45, 0.95) 100%)",
   },
   {
     entry: "Entry 3",
@@ -34,8 +45,6 @@ export const WRITINGS: WritingItem[] = [
     description: "What changes when taste becomes visible.",
     date: "Coming soon",
     href: "#",
-    coverGradient:
-      "linear-gradient(145deg, rgba(184, 130, 80, 0.88) 0%, rgba(104, 70, 39, 0.82) 45%, rgba(31, 23, 17, 0.95) 100%)",
   },
   {
     entry: "Entry 2",
@@ -43,8 +52,6 @@ export const WRITINGS: WritingItem[] = [
     description: "On depth over short-term optimization.",
     date: "Coming soon",
     href: "#",
-    coverGradient:
-      "linear-gradient(145deg, rgba(74, 177, 139, 0.88) 0%, rgba(43, 103, 80, 0.82) 45%, rgba(18, 34, 28, 0.95) 100%)",
   },
 ];
 
