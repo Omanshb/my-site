@@ -22,7 +22,10 @@ export function TopNav() {
       aria-label="Primary navigation"
     >
       {NAV_ITEMS.map((item) => {
-        const isActive = pathname === item.href;
+        const isActive =
+          item.href === "/"
+            ? pathname === "/"
+            : pathname === item.href || pathname.startsWith(`${item.href}/`);
 
         return (
           <Link

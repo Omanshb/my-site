@@ -23,3 +23,8 @@ body {
 .font-nav {
   font-family: var(--font-nav), var(--font-sans), system-ui, sans-serif;
 }
+
+.font-notes-section {
+  font-family: var(--font-notes-section), var(--font-nav), var(--font-sans),
+    system-ui, sans-serif;
+}

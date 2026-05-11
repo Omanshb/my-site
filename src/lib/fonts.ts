@@ -1,4 +1,4 @@
-import { Geist, Inter_Tight } from "next/font/google";
+import { Geist, IBM_Plex_Mono, Inter_Tight } from "next/font/google";
 import localFont from "next/font/local";
 
 export const sansFont = Geist({
@@ -40,5 +40,12 @@ export const navFont = Inter_Tight({
   subsets: ["latin"],
   weight: ["500"],
   variable: "--font-nav",
+  display: "swap",
+});
+
+export const notesSectionFont = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-notes-section",
   display: "swap",
 });
