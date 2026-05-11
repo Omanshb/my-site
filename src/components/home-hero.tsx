@@ -37,7 +37,7 @@ export function HomeHero() {
       className="pointer-events-none fixed inset-0 z-30 max-md:px-6 md:pl-[51%] md:pr-12 lg:pr-16"
       aria-label="Introduction"
     >
-      <div className="pointer-events-auto h-full max-w-xl pb-12 pr-2 pt-24 text-left md:max-w-2xl md:pb-16 md:pr-3 md:pt-35 md:pl-2">
+      <div className="h-full max-w-xl pb-12 pr-2 pt-16 text-left md:max-w-2xl md:pb-16 md:pr-3 md:pt-28 md:pl-2">
         <motion.h1
           className="font-hero text-[70px] leading-[1.08] tracking-tight text-white"
           variants={blurReveal}
