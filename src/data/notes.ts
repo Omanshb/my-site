@@ -22,22 +22,15 @@ export type ThoughtItem = {
 
 export const WRITINGS: WritingItem[] = [
   {
-    entry: "Entry 2",
-    title: "Leaving the Sandbox",
-    description: "What now?",
-    date: "05.15.2026",
-    href: "#",
-    coverImage: "/blog_covers/leavingthesandbox.png",
-    coverZoomClassName: "scale-[1.03]",
-    coverDither: true,
-  },
-  {
     entry: "Entry 1",
     title: "Earning My Goodbyes",
     description: "The hardest one yet.",
-    date: "Coming soon",
+    date: "05.19.2026",
     href: "#",
-  }
+    coverImage: "/blog_covers/earningmygoodbyes.jpeg",
+    coverZoomClassName: "rotate-90 scale-[1.15]",
+    coverDither: true,
+  },
 ];
 
 export const READINGS: Record<string, ReadingItem[]> = {

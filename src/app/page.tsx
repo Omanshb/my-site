@@ -5,7 +5,7 @@ import { useState } from "react";
 import { BackgroundReadingGradient } from "@/components/home/background-reading-gradient";
 import HomeDitherBackground from "@/components/home/home-dither-background";
 import { HomeHero } from "@/components/home/home-hero";
-import { SocialLinks } from "@/components/layout/social-links";
+import { TopLeftStatus } from "@/components/layout/top-left-status";
 import { TopNav } from "@/components/layout/top-nav";
 
 export default function HomePage() {
@@ -19,7 +19,7 @@ export default function HomePage() {
     >
       <HomeDitherBackground onReady={() => setIsDitherReady(true)} />
       <BackgroundReadingGradient />
-      <SocialLinks />
+      <TopLeftStatus />
       <TopNav />
       <HomeHero />
     </div>

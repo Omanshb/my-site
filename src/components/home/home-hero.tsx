@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { SocialLinks } from "@/components/layout/social-links";
 
 const blurEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -17,7 +18,7 @@ const paragraphContainerVariants = {
   visible: {
     transition: {
       delayChildren: 0.3,
-      staggerChildren: 0.15,
+      staggerChildren: 0.3,
     },
   },
 };
@@ -80,12 +81,11 @@ export function HomeHero() {
             posuere cubilia curae; Nunc tincidunt sem vel augue semper, nec
             congue magna vulputate. Aenean congue magna at eros tristique, sed
             feugiat lorem volutpat. Proin eu orci sit amet risus volutpat
-            gravida. Vestibulum ante ipsum primis in faucibus orci luctus et
-            ultrices posuere cubilia curae; Nunc tincidunt sem vel augue semper,
-            nec congue magna vulputate. Aenean congue magna at eros tristique,
-            sed feugiat lorem volutpat. Proin eu orci sit amet risus volutpat
-            gravida.
+            gravida. 
           </motion.p>
+          <motion.div variants={paragraphVariants} className="pt-2">
+            <SocialLinks className="pointer-events-auto text-base font-[500] leading-relaxed md:text-lg" />
+          </motion.div>
         </motion.div>
       </div>
     </section>

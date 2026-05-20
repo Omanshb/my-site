@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 
-import { SocialLinks } from "@/components/layout/social-links";
+import { TopLeftStatus } from "@/components/layout/top-left-status";
 import { TopNav } from "@/components/layout/top-nav";
 
 type NotesSection = "writings" | "readings" | "thoughts";
@@ -22,7 +22,7 @@ export function NotesShell({
 }: NotesShellProps) {
   return (
     <div className="min-h-screen bg-black text-white">
-      <SocialLinks />
+      <TopLeftStatus />
       <TopNav />
       <main className="mx-auto w-full max-w-3xl px-6 pb-24 pt-24 sm:px-8 sm:pt-28">
         <header className="border-b border-white/15 pb-7">
