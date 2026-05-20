@@ -1,7 +1,7 @@
 import Link from "next/link";
 
-import { READINGS, type ReadingItem } from "@/app/notes/content";
-import { NotesShell } from "@/app/notes/notes-shell";
+import { NotesShell } from "@/components/notes/notes-shell";
+import { READINGS, type ReadingItem } from "@/data/notes";
 
 function ReadingGroup({
   label,

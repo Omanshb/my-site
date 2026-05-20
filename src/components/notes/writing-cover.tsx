@@ -25,10 +25,10 @@ export function WritingCover({
     return (
       <DitherShader
         src={src}
-        gridSize={0.2}
+        gridSize={1}
         ditherMode="bayer"
         colorMode="original"
-        brightness={0}
+        brightness={-0.12}
         contrast={1.4}
         primaryColor="#000000"
         secondaryColor="#f5f5f5"

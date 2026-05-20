@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 
-import { BackgroundReadingGradient } from "@/components/background-reading-gradient";
-import { HomeHero } from "@/components/home-hero";
-import { SocialLinks } from "@/components/social-links";
-import { TopNav } from "@/components/top-nav";
-import HomeDitherBackground from "@/components/ui/home-dither-background";
+import { BackgroundReadingGradient } from "@/components/home/background-reading-gradient";
+import HomeDitherBackground from "@/components/home/home-dither-background";
+import { HomeHero } from "@/components/home/home-hero";
+import { SocialLinks } from "@/components/layout/social-links";
+import { TopNav } from "@/components/layout/top-nav";
 
 export default function HomePage() {
   const [isDitherReady, setIsDitherReady] = useState(false);

@@ -1,8 +1,8 @@
 import Link from "next/link";
 
-import { WRITINGS } from "@/app/notes/content";
-import { NotesShell } from "@/app/notes/notes-shell";
-import { WritingCover } from "@/app/notes/writings/writing-cover";
+import { NotesShell } from "@/components/notes/notes-shell";
+import { WritingCover } from "@/components/notes/writing-cover";
+import { WRITINGS } from "@/data/notes";
 
 export default function NotesWritingsPage() {
   return (

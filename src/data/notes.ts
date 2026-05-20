@@ -22,10 +22,9 @@ export type ThoughtItem = {
 
 export const WRITINGS: WritingItem[] = [
   {
-    entry: "Entry 5",
+    entry: "Entry 2",
     title: "Leaving the Sandbox",
-    description:
-      "What now?",
+    description: "What now?",
     date: "05.15.2026",
     href: "#",
     coverImage: "/blog_covers/leavingthesandbox.png",
@@ -33,26 +32,12 @@ export const WRITINGS: WritingItem[] = [
     coverDither: true,
   },
   {
-    entry: "Entry 4",
-    title: "Forward Projections",
-    description: "Building things with a longer memory.",
+    entry: "Entry 1",
+    title: "Earning My Goodbyes",
+    description: "The hardest one yet.",
     date: "Coming soon",
     href: "#",
-  },
-  {
-    entry: "Entry 3",
-    title: "Leaving Text Behind",
-    description: "What changes when taste becomes visible.",
-    date: "Coming soon",
-    href: "#",
-  },
-  {
-    entry: "Entry 2",
-    title: "Global Maxima",
-    description: "On depth over short-term optimization.",
-    date: "Coming soon",
-    href: "#",
-  },
+  }
 ];
 
 export const READINGS: Record<string, ReadingItem[]> = {

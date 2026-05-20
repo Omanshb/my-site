@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 
-import { SocialLinks } from "@/components/social-links";
-import { TopNav } from "@/components/top-nav";
+import { SocialLinks } from "@/components/layout/social-links";
+import { TopNav } from "@/components/layout/top-nav";
 
 type NotesSection = "writings" | "readings" | "thoughts";
 
@@ -30,7 +30,7 @@ export function NotesShell({
             Notes
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/52 md:text-lg">
-          <span className="text-white/45">A running log of what I </span>
+            <span className="text-white/45">A running log of what I </span>
             <Link
               href="/notes/writings"
               className={`${linkClassName} ${

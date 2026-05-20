@@ -76,7 +76,15 @@ export function HomeHero() {
             gravida.
           </motion.p>
           <motion.p variants={paragraphVariants}>
-            Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nunc tincidunt sem vel augue semper, nec congue magna vulputate. Aenean congue magna at eros tristique, sed feugiat lorem volutpat. Proin eu orci sit amet risus volutpat gravida. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nunc tincidunt sem vel augue semper, nec congue magna vulputate. Aenean congue magna at eros tristique, sed feugiat lorem volutpat. Proin eu orci sit amet risus volutpat gravida.
+            Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
+            posuere cubilia curae; Nunc tincidunt sem vel augue semper, nec
+            congue magna vulputate. Aenean congue magna at eros tristique, sed
+            feugiat lorem volutpat. Proin eu orci sit amet risus volutpat
+            gravida. Vestibulum ante ipsum primis in faucibus orci luctus et
+            ultrices posuere cubilia curae; Nunc tincidunt sem vel augue semper,
+            nec congue magna vulputate. Aenean congue magna at eros tristique,
+            sed feugiat lorem volutpat. Proin eu orci sit amet risus volutpat
+            gravida.
           </motion.p>
         </motion.div>
       </div>

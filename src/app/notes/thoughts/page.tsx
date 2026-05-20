@@ -1,5 +1,5 @@
-import { THOUGHTS } from "@/app/notes/content";
-import { NotesShell } from "@/app/notes/notes-shell";
+import { NotesShell } from "@/components/notes/notes-shell";
+import { THOUGHTS } from "@/data/notes";
 
 export default function NotesThoughtsPage() {
   return (
