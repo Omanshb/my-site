@@ -29,6 +29,19 @@ type SpotifyRecentlyPlayedPayload = {
   }>;
 };
 
+async function parseJsonSafely<T>(response: Response): Promise<T | null> {
+  if (response.status === 204) return null;
+
+  const body = await response.text();
+  if (!body.trim()) return null;
+
+  try {
+    return JSON.parse(body) as T;
+  } catch {
+    return null;
+  }
+}
+
 async function getSpotifyAccessToken() {
   const clientId = process.env.SPOTIFY_CLIENT_ID;
   const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
@@ -79,11 +92,11 @@ export async function GET() {
 
     if (currentlyPlayingResponse.ok) {
       const currentlyPlaying =
-        (await currentlyPlayingResponse.json()) as SpotifyTrackPayload;
-      const currentTrackName = currentlyPlaying.item?.name;
-      const currentArtistName = currentlyPlaying.item?.artists?.[0]?.name;
+        await parseJsonSafely<SpotifyTrackPayload>(currentlyPlayingResponse);
+      const currentTrackName = currentlyPlaying?.item?.name;
+      const currentArtistName = currentlyPlaying?.item?.artists?.[0]?.name;
 
-      if (currentlyPlaying.is_playing && currentTrackName) {
+      if (currentlyPlaying?.is_playing && currentTrackName) {
         return NextResponse.json(
           {
             song: currentTrackName,
