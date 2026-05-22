@@ -22,7 +22,7 @@ function ReadingGroup({
             className="grid gap-1 border-b border-white/10 pb-3 sm:grid-cols-[1fr_auto]"
           >
             <div>
-              <p className="font-display text-[19px] leading-tight text-white/95">
+              <p className="font-display text-[19px] leading-tight text-white/85">
                 {item.href ? (
                   <Link
                     href={item.href}
@@ -52,12 +52,6 @@ export default function NotesReadingsPage() {
   return (
     <NotesShell activeSection="readings">
       <section>
-        <h2 className="font-display text-[32px] leading-none text-white">
-          Readings
-        </h2>
-        <p className="mt-3 max-w-2xl text-sm text-white/55">
-          Videos, papers, blogs, books - each with a short takeaway.
-        </p>
         <div className="mt-6 space-y-8">
           {Object.entries(READINGS).map(([label, items]) => (
             <ReadingGroup key={label} label={label} items={items} />

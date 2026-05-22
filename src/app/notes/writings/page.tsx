@@ -38,7 +38,7 @@ export default function NotesWritingsPage() {
                   </div>
                   <Link
                     href={getWritingHref(item.slug)}
-                    className="font-display mt-2 block text-[33px] leading-[1.02] text-white/95 transition-colors duration-200 hover:text-white"
+                    className="font-display mt-2 block text-[33px] leading-[1.02] text-white/85 transition-colors duration-200 hover:text-white"
                   >
                     {item.title}
                   </Link>

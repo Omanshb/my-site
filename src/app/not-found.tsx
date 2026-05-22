@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import { TopLeftStatus } from "@/components/layout/top-left-status";
 import { TopNav } from "@/components/layout/top-nav";
 import { DitheringShader } from "@/components/ui/dithering-shader";
@@ -24,7 +22,7 @@ export default function NotFound() {
       <TopNav />
 
       <main className="relative z-10 mx-auto flex min-h-screen w-full max-w-3xl -translate-y-6 flex-col items-center justify-center px-6 text-center sm:px-8">
-        <h1 className="font-display text-[42px] leading-[0.98] text-white/95 sm:text-[42px]">
+        <h1 className="font-hero text-[42px] leading-[0.98] text-white/95 sm:text-[42px]">
           You&apos;ve wandered too far.
         </h1>
         <p className="font-notes-section mt-4 text-[15px] uppercase tracking-[0.14em] text-white/45">
