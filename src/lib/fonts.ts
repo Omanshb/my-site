@@ -1,4 +1,4 @@
-import { Geist, IBM_Plex_Mono, Inter_Tight } from "next/font/google";
+import { Alex_Brush, Geist, IBM_Plex_Mono, Inter_Tight } from "next/font/google";
 import localFont from "next/font/local";
 
 export const sansFont = Geist({
@@ -47,5 +47,12 @@ export const notesSectionFont = IBM_Plex_Mono({
   subsets: ["latin"],
   weight: ["400", "500"],
   variable: "--font-notes-section",
+  display: "swap",
+});
+
+export const signatureFont = Alex_Brush({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-signature",
   display: "swap",
 });

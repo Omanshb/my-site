@@ -5,6 +5,7 @@ import {
   navFont,
   notesSectionFont,
   sansFont,
+  signatureFont,
 } from "@/lib/fonts";
 
 import "./globals.css";
@@ -28,7 +29,7 @@ export default function RootLayout({
         <link rel="preload" as="image" href="/media/images/cityskyline.jpeg" />
       </head>
       <body
-        className={`${sansFont.variable} ${displayFont.variable} ${heroFont.variable} ${navFont.variable} ${notesSectionFont.variable} min-h-screen antialiased`}
+        className={`${sansFont.variable} ${displayFont.variable} ${heroFont.variable} ${navFont.variable} ${notesSectionFont.variable} ${signatureFont.variable} min-h-screen antialiased`}
       >
         {children}
       </body>

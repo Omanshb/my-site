@@ -1,13 +1,21 @@
 export type WritingItem = {
+  slug: string;
   entry: string;
   title: string;
   description: string;
   date: string;
-  href: string;
   coverImage?: string;
   coverZoomClassName?: string;
   coverDither?: boolean;
 };
+
+export function getWritingHref(slug: string) {
+  return `/notes/writings/${slug}`;
+}
+
+export function getWritingBySlug(slug: string): WritingItem | undefined {
+  return WRITINGS.find((item) => item.slug === slug);
+}
 
 export type ReadingItem = {
   title: string;
@@ -22,11 +30,11 @@ export type ThoughtItem = {
 
 export const WRITINGS: WritingItem[] = [
   {
+    slug: "earning-my-goodbyes",
     entry: "Entry 1",
     title: "Earning My Goodbyes",
-    description: "The hardest one yet.",
+    description: "Leaving 1804 and Tech",
     date: "05.19.2026",
-    href: "#",
     coverImage: "/blog_covers/earningmygoodbyes.jpeg",
     coverZoomClassName: "rotate-90 scale-[1.15]",
     coverDither: true,

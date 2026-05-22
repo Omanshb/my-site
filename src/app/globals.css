@@ -28,3 +28,125 @@ body {
   font-family: var(--font-notes-section), var(--font-nav), var(--font-sans),
     system-ui, sans-serif;
 }
+
+.font-signature {
+  font-family: var(--font-signature), var(--font-display), var(--font-sans),
+    system-ui, sans-serif;
+}
+
+/* Long-form writing — extensible for math, media, embeds */
+.article-prose {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.78;
+  color: rgba(255, 255, 255, 0.68);
+  letter-spacing: 0.01em;
+}
+
+.article-prose > * + * {
+  margin-top: 1.45em;
+}
+
+.article-prose > :first-child {
+  margin-top: 0;
+}
+
+.article-prose .article-signature {
+  margin-top: 0.8em;
+}
+
+.article-prose h2 {
+  margin-top: 2.75em;
+  font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
+  font-size: 1.55rem;
+  line-height: 1.2;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.article-prose h3 {
+  margin-top: 2.25em;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 1.05rem;
+  line-height: 1.35;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.article-prose strong {
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.article-prose a {
+  color: rgba(255, 255, 255, 0.88);
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.35);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.2s ease;
+}
+
+.article-prose a:hover {
+  text-decoration-color: rgba(255, 255, 255, 0.7);
+}
+
+.article-prose blockquote {
+  margin-top: 2em;
+  padding-left: 1.1em;
+  border-left: 1px solid rgba(255, 255, 255, 0.18);
+  font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
+  font-size: 1.2rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.article-prose figure {
+  margin-top: 2.5em;
+  margin-bottom: 2.5em;
+}
+
+.article-prose figcaption {
+  margin-top: 0.75em;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.article-prose img,
+.article-prose video,
+.article-prose iframe {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 2px;
+}
+
+.article-prose .media-wide {
+  width: min(100%, 52rem);
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+
+.article-prose pre {
+  overflow-x: auto;
+  padding: 1rem 1.1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  font-family: var(--font-notes-section), monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.article-prose code {
+  font-family: var(--font-notes-section), monospace;
+  font-size: 0.9em;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.article-prose hr {
+  margin-top: 3em;
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
