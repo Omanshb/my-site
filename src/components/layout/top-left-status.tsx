@@ -21,13 +21,17 @@ const SF_TIME_FORMATTER = new Intl.DateTimeFormat("en-US", {
 type DisplayMode = "time" | "spotify" | "github" | "quote";
 
 type SpotifyTrackResponse = {
-  song?: string;
-  artist?: string;
+  song: string;
+  artist: string;
 };
 
 type SpotifyTrack = {
   song: string;
   artist: string;
+};
+
+type SpotifyTrackCacheEntry = SpotifyTrack & {
+  updatedAt: number;
 };
 
 type GithubContributionDay = {
@@ -39,11 +43,6 @@ type GithubContributionsResponse = {
   days?: GithubContributionDay[];
 };
 
-const DEFAULT_SPOTIFY_TRACK = {
-  song: "Texts Go Green",
-  artist: "Drake",
-};
-
 const LOADING_SPOTIFY_TRACK = {
   song: "...",
   artist: "",
@@ -52,18 +51,21 @@ const LOADING_SPOTIFY_TRACK = {
 const SPOTIFY_CACHE_KEY = "top-left-status:spotify-track";
 const SPOTIFY_POLL_INTERVAL_MS = 30_000;
 
-function readCachedSpotifyTrack(): SpotifyTrack | null {
+function readCachedSpotifyTrack(): SpotifyTrackCacheEntry | null {
   try {
     const rawCache = window.localStorage.getItem(SPOTIFY_CACHE_KEY);
     if (!rawCache) return null;
 
-    const parsed = JSON.parse(rawCache) as Partial<SpotifyTrack>;
+    const parsed = JSON.parse(rawCache) as Partial<SpotifyTrackCacheEntry>;
     const cachedSong = parsed.song?.trim();
-    if (!cachedSong) return null;
+    const cachedUpdatedAt =
+      typeof parsed.updatedAt === "number" ? parsed.updatedAt : null;
+    if (!cachedSong || !cachedUpdatedAt) return null;
 
     return {
       song: cachedSong,
       artist: parsed.artist ?? "",
+      updatedAt: cachedUpdatedAt,
     };
   } catch {
     return null;
@@ -202,51 +204,47 @@ export function TopLeftStatus() {
   useEffect(() => {
     const cachedTrack = readCachedSpotifyTrack();
     if (cachedTrack) {
-      setSpotifyTrack(cachedTrack);
+      setSpotifyTrack({
+        song: cachedTrack.song,
+        artist: cachedTrack.artist,
+      });
     }
   }, []);
 
   useEffect(() => {
-    if (mode !== "spotify") return;
-
     let isMounted = true;
 
     const loadSpotifySong = async () => {
       const cachedTrack = readCachedSpotifyTrack();
+      const now = Date.now();
+
+      if (cachedTrack && now - cachedTrack.updatedAt < SPOTIFY_POLL_INTERVAL_MS) {
+        if (isMounted) {
+          setSpotifyTrack({ song: cachedTrack.song, artist: cachedTrack.artist });
+        }
+        return;
+      }
 
       try {
-        const response = await fetch("/api/spotify/last-track", {
-          cache: "no-store",
-        });
-        if (!response.ok) {
-          if (isMounted) {
-            setSpotifyTrack(cachedTrack ?? DEFAULT_SPOTIFY_TRACK);
-          }
-          return;
-        }
+        const response = await fetch("/api/spotify/last-track");
+        if (!response.ok) return;
+
         const json = (await response.json()) as SpotifyTrackResponse;
         const songFromApi = json.song?.trim();
-        const hasValidSong =
-          !!songFromApi &&
-          songFromApi !== "Spotify unavailable." &&
-          songFromApi !== "No recent song found.";
-        if (isMounted) {
-          const nextTrack = hasValidSong
-            ? {
-                song: songFromApi,
-                artist: json.artist ?? DEFAULT_SPOTIFY_TRACK.artist,
-              }
-            : (cachedTrack ?? DEFAULT_SPOTIFY_TRACK);
+        if (!songFromApi) return;
 
-          setSpotifyTrack(nextTrack);
-          if (hasValidSong) {
-            window.localStorage.setItem(SPOTIFY_CACHE_KEY, JSON.stringify(nextTrack));
-          }
+        const nextTrack: SpotifyTrackCacheEntry = {
+          song: songFromApi,
+          artist: json.artist?.trim() ?? "",
+          updatedAt: now,
+        };
+
+        if (isMounted) {
+          setSpotifyTrack({ song: nextTrack.song, artist: nextTrack.artist });
+          window.localStorage.setItem(SPOTIFY_CACHE_KEY, JSON.stringify(nextTrack));
         }
       } catch {
-        if (isMounted) {
-          setSpotifyTrack(cachedTrack ?? DEFAULT_SPOTIFY_TRACK);
-        }
+        // Keep the most recent known track on transient network issues.
       }
     };
 
@@ -257,7 +255,7 @@ export function TopLeftStatus() {
       isMounted = false;
       window.clearInterval(interval);
     };
-  }, [mode]);
+  }, []);
 
   useEffect(() => {
     if (mode !== "github") return;

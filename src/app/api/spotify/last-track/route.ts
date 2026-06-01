@@ -29,6 +29,11 @@ type SpotifyRecentlyPlayedPayload = {
   }>;
 };
 
+type SpotifyTrackResponse = {
+  song: string;
+  artist: string;
+};
+
 async function parseJsonSafely<T>(response: Response): Promise<T | null> {
   if (response.status === 204) return null;
 
@@ -97,13 +102,14 @@ export async function GET() {
       const currentArtistName = currentlyPlaying?.item?.artists?.[0]?.name;
 
       if (currentlyPlaying?.is_playing && currentTrackName) {
+        const payload: SpotifyTrackResponse = {
+          song: currentTrackName,
+          artist: currentArtistName ?? "",
+        };
+
         return NextResponse.json(
-          {
-            song: currentTrackName,
-            artist: currentArtistName ?? "Unknown Artist",
-            source: "currently-playing",
-          },
-          { headers: { "Cache-Control": "no-store" } },
+          payload,
+          { headers: { "Cache-Control": "public, max-age=30, s-maxage=30" } },
         );
       }
     }
@@ -125,25 +131,20 @@ export async function GET() {
     const recentArtistName = recentlyPlayed.items?.[0]?.track?.artists?.[0]?.name;
 
     if (!recentTrackName) {
-      return NextResponse.json(
-        { song: "No recent song found.", artist: "", source: "none" },
-        { headers: { "Cache-Control": "no-store" } },
-      );
+      throw new Error("No recent Spotify track found.");
     }
 
+    const payload: SpotifyTrackResponse = {
+      song: recentTrackName,
+      artist: recentArtistName ?? "",
+    };
+
     return NextResponse.json(
-      {
-        song: recentTrackName,
-        artist: recentArtistName ?? "Unknown Artist",
-        source: "recently-played",
-      },
-      { headers: { "Cache-Control": "no-store" } },
+      payload,
+      { headers: { "Cache-Control": "public, max-age=30, s-maxage=30" } },
     );
   } catch (error) {
     console.error(error);
-    return NextResponse.json(
-      { song: "Spotify unavailable.", artist: "", source: "error" },
-      { status: 503, headers: { "Cache-Control": "no-store" } },
-    );
+    return NextResponse.json({ error: "Spotify unavailable." }, { status: 503 });
   }
 }
