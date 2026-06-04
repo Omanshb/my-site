@@ -63,16 +63,15 @@ export function HomeHero() {
           animate="visible"
         >
           <motion.p variants={paragraphVariants}>
-          a 21-year-old software engineer, researcher, and builder based out of San Francisco. Though I like to consider myself a life-long student as well, I recently graduated from Georgia Tech with a bachelor’s degree in computer science. Currently, I’m a member of technical staff at Mercor, where I’m helping scale RL environments, post-training, and synthetic data.
-          </motion.p>
+          a 21-year-old software engineer, researcher, and builder based out of San Francisco. I recently graduated from Georgia Tech with a bachelor’s degree in computer science, though I like to consider myself a life-long student. Currently, I’m a member of technical staff at Mercor, where I’m helping scale RL environments, post-training, and synthetic data.          </motion.p>
           <motion.p variants={paragraphVariants}>
-          I’m primarily devoted to taking the theoretical research ideas I read about and forging them into systems that thrive in the real world. More recently, this has led me to work on security infrastructure for enterprise AI systems at Triage and agent evaluation frameworks at Salesforce. 
+          I’m primarily devoted to taking the theoretical research ideas I read about and forging them into systems that thrive in the real world. More recently, this has led me to work on security infrastructure for enterprise AI at Triage and agent evaluation frameworks at Salesforce. 
           </motion.p>
           <motion.p variants={paragraphVariants}>
           When my laptop dies, you’ll see me outside trying to catch the perfect photo, unwinding with a round of golf, or pretending to be a movie critic. I’ve also had some unsolicited attempts at becoming more literate.
           </motion.p>
           <motion.p variants={paragraphVariants}>
-          To all of the remarkable people who I've had the opportunity to surround myself with, I'm perpetually grateful for you all. If you're among the hundreds more that are yet to come, reach out.
+          To all of the remarkable people who I&apos;ve had the opportunity to surround myself with, I&apos;m perpetually grateful for you all. If you&apos;re among the hundreds more that are yet to come, reach out.
           </motion.p>
           <motion.div variants={paragraphVariants} className="pt-2">
             <SocialLinks className="pointer-events-auto text-sm font-[500] leading-relaxed md:text-base" />

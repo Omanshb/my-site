@@ -13,7 +13,8 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
 import * as THREE from "three";
 
-type ImageItem = string | { src: string; alt?: string };
+type NormalizedImageItem = { src: string; alt?: string };
+type ImageItem = string | NormalizedImageItem;
 
 type FadeSettings = {
   fadeIn: {
@@ -133,18 +134,34 @@ function ImagePlane({
   position,
   scale,
   material,
+  onSelect,
+  isInteractive,
 }: {
   texture: THREE.Texture;
   position: [number, number, number];
   scale: [number, number, number];
   material: THREE.ShaderMaterial;
+  onSelect?: () => void;
+  isInteractive: boolean;
 }) {
   useEffect(() => {
     material.uniforms.map.value = texture;
   }, [material, texture]);
 
   return (
-    <mesh position={position} scale={scale} material={material}>
+    <mesh
+      position={position}
+      scale={scale}
+      material={material}
+      onClick={
+        isInteractive
+          ? (event) => {
+              event.stopPropagation();
+              onSelect?.();
+            }
+          : undefined
+      }
+    >
       <planeGeometry args={[1, 1, 32, 32]} />
     </mesh>
   );
@@ -165,7 +182,10 @@ function GalleryScene({
     maxBlur: 8.0,
   },
   onLoad,
-}: Omit<InfiniteGalleryProps, "className" | "style">) {
+  onImageSelect,
+}: Omit<InfiniteGalleryProps, "className" | "style"> & {
+  onImageSelect?: (image: NormalizedImageItem) => void;
+}) {
   const { gl } = useThree();
   const [scrollVelocity, setScrollVelocity] = useState(0);
   const [autoPlay, setAutoPlay] = useState(true);
@@ -409,6 +429,11 @@ function GalleryScene({
         if (!texture || !material) return null;
 
         const worldZ = plane.z - depthRange / 2;
+        const galleryImage = normalizedImages[plane.imageIndex];
+        const normalizedPosition = plane.z / depthRange;
+        const isInteractive =
+          normalizedPosition >= fadeSettings.fadeIn.end &&
+          normalizedPosition <= fadeSettings.fadeOut.start;
         const image = texture.image as
           | { width?: number; height?: number }
           | undefined;
@@ -426,6 +451,10 @@ function GalleryScene({
             position={[plane.x, plane.y, worldZ]}
             scale={scale}
             material={material}
+            isInteractive={isInteractive}
+            onSelect={
+              galleryImage ? () => onImageSelect?.(galleryImage) : undefined
+            }
           />
         );
       })}
@@ -460,6 +489,12 @@ export default function InfiniteGallery({
   onLoad,
 }: InfiniteGalleryProps) {
   const [webglSupported, setWebglSupported] = useState(true);
+  const [selectedImage, setSelectedImage] =
+    useState<NormalizedImageItem | null>(null);
+
+  const closeSelectedImage = useCallback(() => {
+    setSelectedImage(null);
+  }, []);
 
   useEffect(() => {
     try {
@@ -474,6 +509,20 @@ export default function InfiniteGallery({
       setWebglSupported(false);
     }
   }, []);
+
+  useEffect(() => {
+    if (!selectedImage) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        closeSelectedImage();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [closeSelectedImage, selectedImage]);
 
   if (!webglSupported) {
     return (
@@ -498,9 +547,35 @@ export default function InfiniteGallery({
             fadeSettings={fadeSettings}
             blurSettings={blurSettings}
             onLoad={onLoad}
+            onImageSelect={setSelectedImage}
           />
         </Suspense>
       </Canvas>
+      {selectedImage ? (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm md:p-8"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Expanded gallery photo"
+          onClick={closeSelectedImage}
+        >
+          <button
+            type="button"
+            className="absolute right-5 top-5 rounded-full border border-white/20 bg-black/60 px-3 py-1.5 text-sm font-medium text-white/90 transition hover:border-white/40 hover:bg-white/10 hover:text-white"
+            onClick={closeSelectedImage}
+            aria-label="Close expanded photo"
+          >
+            Close
+          </button>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={selectedImage.src}
+            alt={selectedImage.alt || "Expanded gallery photo"}
+            className="max-h-[88vh] max-w-[92vw] rounded-lg object-contain shadow-2xl shadow-black/60"
+            onClick={(event) => event.stopPropagation()}
+          />
+        </div>
+      ) : null}
     </div>
   );
 }
