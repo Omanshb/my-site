@@ -29,7 +29,7 @@ export default function NotesWritingsPage() {
                 </Link>
                 <div className="min-w-0">
                   <div className="flex items-start justify-between gap-4">
-                    <p className="font-notes-section text-[11px] uppercase tracking-[0.12em] text-white/50">
+                    <p className="font-notes-section text-[11.5px] uppercase tracking-[0.12em] text-white/50">
                       {item.date}
                     </p>
                     <p className="font-notes-section text-[11px] uppercase tracking-[0.12em] text-white/50">
@@ -42,7 +42,7 @@ export default function NotesWritingsPage() {
                   >
                     {item.title}
                   </Link>
-                  <p className="mt-2 max-w-2xl text-base leading-relaxed text-white/60">
+                  <p className="mt-2 max-w-2xl text-base leading-relaxed text-white/52">
                     {item.description}
                   </p>
                 </div>
