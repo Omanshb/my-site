@@ -179,9 +179,7 @@ function wrapQuoteLines(text: string, maxCharsPerLine: number) {
 }
 
 export function TopLeftStatus() {
-  const [currentTime, setCurrentTime] = useState(() =>
-    SF_TIME_FORMATTER.format(new Date()),
-  );
+  const [currentTime, setCurrentTime] = useState("");
   const [mode, setMode] = useState<DisplayMode>("time");
   const [spotifyTrack, setSpotifyTrack] = useState<SpotifyTrack>(
     LOADING_SPOTIFY_TRACK,
@@ -192,6 +190,10 @@ export function TopLeftStatus() {
   const [quoteIndex] = useState(QUOTES.length - 1);
 
   useEffect(() => {
+    // Set on the client only; rendering the clock during SSR would mismatch
+    // the time captured a few seconds earlier on the server.
+    setCurrentTime(SF_TIME_FORMATTER.format(new Date()));
+
     const interval = window.setInterval(() => {
       setCurrentTime(SF_TIME_FORMATTER.format(new Date()));
     }, 1000);
@@ -362,7 +364,7 @@ export function TopLeftStatus() {
               : "truncate whitespace-nowrap"
         }`}
       >
-        {mode === "time" && `San Francisco: ${currentTime}`}
+        {mode === "time" && currentTime && `San Francisco: ${currentTime}`}
         {mode === "spotify" && (
           <>
             <span className="italic">

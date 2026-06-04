@@ -45,9 +45,9 @@ type InfiniteGalleryProps = {
   visibleCount?: number;
   fadeSettings?: FadeSettings;
   blurSettings?: BlurSettings;
-  onReady?: () => void;
   className?: string;
   style?: React.CSSProperties;
+  onLoad?: () => void;
 };
 
 type PlaneData = {
@@ -164,13 +164,12 @@ function GalleryScene({
     blurOut: { start: 0.4, end: 0.43 },
     maxBlur: 8.0,
   },
-  onReady,
+  onLoad,
 }: Omit<InfiniteGalleryProps, "className" | "style">) {
   const { gl } = useThree();
   const [scrollVelocity, setScrollVelocity] = useState(0);
   const [autoPlay, setAutoPlay] = useState(true);
   const lastInteraction = useRef(Date.now());
-  const hasReportedReady = useRef(false);
 
   const normalizedImages = useMemo(
     () =>
@@ -184,11 +183,16 @@ function GalleryScene({
   const textureList = Array.isArray(textures) ? textures : [textures];
 
   useEffect(() => {
-    if (!hasReportedReady.current && textureList.length > 0) {
-      hasReportedReady.current = true;
-      onReady?.();
-    }
-  }, [onReady, textureList.length]);
+    // useTexture suspends until every texture is decoded, so reaching this
+    // effect means the scene is ready. Wait two frames so the first painted
+    // frame is on-screen before we tell the parent to fade us in.
+    let frame = 0;
+    frame = requestAnimationFrame(() => {
+      frame = requestAnimationFrame(() => onLoad?.());
+    });
+
+    return () => cancelAnimationFrame(frame);
+  }, [onLoad]);
 
   const materials = useMemo(
     () => Array.from({ length: visibleCount }, () => createClothMaterial()),
@@ -289,8 +293,13 @@ function GalleryScene({
   }, [materials]);
 
   useFrame((state, delta) => {
+    // When the tab is backgrounded the render loop pauses; the first frame on
+    // return arrives with a huge delta. Clamp it so the gallery can't lurch
+    // forward through dozens of photos in a single frame.
+    const dt = Math.min(delta, 0.05);
+
     if (autoPlay) {
-      setScrollVelocity((prev) => prev + 0.3 * delta);
+      setScrollVelocity((prev) => prev + 0.3 * dt);
     }
 
     setScrollVelocity((prev) => prev * 0.95);
@@ -305,7 +314,7 @@ function GalleryScene({
       totalImages > 0 ? visibleCount % totalImages || totalImages : 0;
 
     planesData.current.forEach((plane, i) => {
-      let newZ = plane.z + scrollVelocity * delta * 10;
+      let newZ = plane.z + scrollVelocity * dt * 10;
       let wrapsForward = 0;
       let wrapsBackward = 0;
 
@@ -424,7 +433,11 @@ function GalleryScene({
   );
 }
 
-function FallbackGallery() {
+function FallbackGallery({ onLoad }: { onLoad?: () => void }) {
+  useEffect(() => {
+    onLoad?.();
+  }, [onLoad]);
+
   return <div className="h-full w-full bg-black" />;
 }
 
@@ -435,7 +448,6 @@ export default function InfiniteGallery({
   speed = 1,
   zSpacing = 3,
   visibleCount = 12,
-  onReady,
   fadeSettings = {
     fadeIn: { start: 0.05, end: 0.25 },
     fadeOut: { start: 0.4, end: 0.43 },
@@ -445,6 +457,7 @@ export default function InfiniteGallery({
     blurOut: { start: 0.4, end: 0.43 },
     maxBlur: 8.0,
   },
+  onLoad,
 }: InfiniteGalleryProps) {
   const [webglSupported, setWebglSupported] = useState(true);
 
@@ -465,7 +478,7 @@ export default function InfiniteGallery({
   if (!webglSupported) {
     return (
       <div className={className} style={style}>
-        <FallbackGallery />
+        <FallbackGallery onLoad={onLoad} />
       </div>
     );
   }
@@ -484,7 +497,7 @@ export default function InfiniteGallery({
             visibleCount={visibleCount}
             fadeSettings={fadeSettings}
             blurSettings={blurSettings}
-          onReady={onReady}
+            onLoad={onLoad}
           />
         </Suspense>
       </Canvas>
