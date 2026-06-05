@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 
-import { Credentials } from "@/components/about/credentials";
-import { ExperienceList } from "@/components/about/experience-list";
+import {
+  AboutAccordion,
+  type AccordionItem,
+} from "@/components/about/about-accordion";
+import { EducationCard } from "@/components/about/education";
+import { ExperienceRows } from "@/components/about/experience-list";
 import {
   ScrollRevealText,
   type RevealImage,
@@ -44,6 +48,47 @@ const ABOUT_IMAGES: RevealImage[] = [
   },
 ];
 
+const FELLOWSHIPS = [
+  "Palantir Startup Fellow",
+  "YC Startup School",
+  "Millennium Technology Fellow",
+];
+
+const HONORS = [
+  "3rd Place, xAI Hackathon",
+  "USA Computing Olympiad Platinum Division",
+  "American Invitational Mathematics Exam Qualifier",
+  "USA Physics Olympiad Semifinalist",
+  "USA Track and Field Nationals Qualifier",
+  "EA Sports FC Divison 1 (Top 1.5%)"
+];
+
+function TextList({ items }: { items: string[] }) {
+  return (
+    <ul className="space-y-2.5 px-5">
+      {items.map((item) => (
+        <li
+          key={item}
+          className="font-display text-[18px] leading-snug text-white/85"
+        >
+          {item}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+const SECTIONS: AccordionItem[] = [
+  { id: "experience", label: "Experience", content: <ExperienceRows />, defaultOpen: true },
+  { id: "education", label: "Education", content: <EducationCard /> },
+  {
+    id: "fellowships",
+    label: "Fellowships & Programs",
+    content: <TextList items={FELLOWSHIPS} />,
+  },
+  { id: "awards", label: "Awards", content: <TextList items={HONORS} /> },
+];
+
 export default function AboutPage() {
   return (
     <main className="min-h-screen bg-black text-white">
@@ -51,8 +96,7 @@ export default function AboutPage() {
       <TopNav />
 
       <ScrollRevealText text={ABOUT_TEXT} images={ABOUT_IMAGES} />
-      <ExperienceList />
-      <Credentials />
+      <AboutAccordion items={SECTIONS} />
     </main>
   );
 }

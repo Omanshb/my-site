@@ -27,7 +27,7 @@ type Slot = {
   aspect: string;
   rotate: number;
   y: [number, number];
-  fade: [number, number];
+  fadeIn: [number, number];
 };
 
 // Four corner slots framing the centered text. Order is meaningful:
@@ -35,35 +35,35 @@ type Slot = {
 const SLOTS: Slot[] = [
   {
     position: "left-[2.5%] top-[13%]",
-    size: "w-[16vw] max-w-[255px]",
+    size: "w-[18vw] max-w-[290px]",
     aspect: "aspect-[7/5]",
     rotate: -4,
     y: [70, -55],
-    fade: [0, 0.12],
+    fadeIn: [0, 0.2],
   },
   {
     position: "left-[6.5%] bottom-[11%]",
-    size: "w-[11.5vw] max-w-[185px]",
+    size: "w-[13vw] max-w-[210px]",
     aspect: "aspect-[2/3]",
     rotate: 3.5,
     y: [95, -25],
-    fade: [0.06, 0.2],
+    fadeIn: [0.05, 0.27],
   },
   {
-    position: "right-[5.5%] top-[10%]",
-    size: "w-[11.5vw] max-w-[185px]",
+    position: "right-[5.5%] top-[6%]",
+    size: "w-[13vw] max-w-[210px]",
     aspect: "aspect-[3/4]",
     rotate: 4,
     y: [-35, 85],
-    fade: [0.03, 0.17],
+    fadeIn: [0.025, 0.24],
   },
   {
-    position: "right-[2.5%] bottom-[12%]",
-    size: "w-[16vw] max-w-[255px]",
+    position: "right-[2.5%] bottom-[9%]",
+    size: "w-[18vw] max-w-[290px]",
     aspect: "aspect-[4/3]",
     rotate: -3,
     y: [55, -80],
-    fade: [0.09, 0.22],
+    fadeIn: [0.07, 0.3],
   },
 ];
 
@@ -162,7 +162,11 @@ function FloatingPhoto({
   image: RevealImage;
 }) {
   const y = useTransform(progress, [0, 1], slot.y);
-  const opacity = useTransform(progress, slot.fade, [0, 1]);
+  const opacity = useTransform(
+    progress,
+    [slot.fadeIn[0], slot.fadeIn[1], 1],
+    [0, 1, 1],
+  );
 
   return (
     <motion.figure
@@ -170,7 +174,7 @@ function FloatingPhoto({
       className={`absolute ${slot.position} ${slot.size}`}
     >
       <div
-        className={`relative ${slot.aspect} overflow-hidden rounded-2xl ring-1 ring-white/15 shadow-[0_30px_70px_-25px_rgba(0,0,0,0.9)]`}
+        className={`relative ${slot.aspect} overflow-hidden rounded-lg ring-1 ring-white/15 shadow-[0_30px_70px_-25px_rgba(0,0,0,0.9)]`}
       >
         <Image
           src={image.src}
