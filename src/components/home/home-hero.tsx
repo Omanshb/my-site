@@ -63,7 +63,7 @@ export function HomeHero() {
           animate="visible"
         >
           <motion.p variants={paragraphVariants}>
-          a 21-year-old software engineer, researcher, and builder based out of San Francisco. I recently graduated from Georgia Tech with a bachelor’s degree in computer science, though I like to consider myself a life-long student. Currently, I’m a member of technical staff at Mercor, where I’m helping scale RL environments, post-training, and synthetic data.          </motion.p>
+          a 21-year-old software engineer, researcher, and builder based out of San Francisco. I recently graduated from Georgia Tech with a bachelor’s degree in computer science, though I like to consider myself a life-long student. Currently, I’m a member of technical staff at Mercor, where I’m helping scale RL environments and synthetic data.          </motion.p>
           <motion.p variants={paragraphVariants}>
           I’m primarily devoted to taking the theoretical research ideas I read about and forging them into systems that thrive in the real world. More recently, this has led me to work on security infrastructure for enterprise AI at Triage and agent evaluation frameworks at Salesforce. 
           </motion.p>

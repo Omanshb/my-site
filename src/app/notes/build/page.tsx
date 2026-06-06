@@ -1,8 +1,8 @@
 import { NotesShell } from "@/components/notes/notes-shell";
 
-export default function NotesThoughtsPage() {
+export default function NotesBuildPage() {
   return (
-    <NotesShell activeSection="thoughts">
+    <NotesShell activeSection="build">
       <section>
         <ol className="space-y-3">
           <li className="flex items-baseline gap-2">

@@ -1,7 +1,11 @@
+"use client";
+
 /* eslint-disable react/no-unescaped-entities */
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 import { ArticleBody } from "@/components/notes/article-body";
+import { revealItemVariants } from "@/components/notes/article-motion";
 
 export function EarningMyGoodbyesArticle() {
   return (
@@ -232,7 +236,13 @@ export function EarningMyGoodbyesArticle() {
             Om
           </p>
       </ArticleBody>
-      <section className="mt-16 border-t border-white/15 pt-10 font-sans">
+      <motion.section
+        variants={revealItemVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        className="mt-16 border-t border-white/15 pt-10 font-sans"
+      >
           <p className="font-notes-section text-[14px] uppercase tracking-[0.14em] text-white/42">
             The Postscript
           </p>
@@ -242,18 +252,41 @@ export function EarningMyGoodbyesArticle() {
             knowing a couple of years earlier.
           </p>
           <ol className="mt-6 space-y-3 font-sans text-[15px] leading-relaxed text-white/52">
-            <li>1. </li>
-            <li>2. </li>
-            <li>3. </li>
-            <li>4. </li>
-            <li>5. </li>
-            <li>6. </li>
-            <li>7. </li>
-            <li>8. </li>
-            <li>9. </li>
-            <li>10. </li>
+            <li>
+              1. Taking a risk is more rational than you think. If you succeed,
+              hell yeah! You did it at 20. If you fail, hell yeah! You did it at
+              20.
+            </li>
+            <li>2. Join a group. Early on and anything at all.</li>
+            <li>
+              3. Ironically, there’s a proper way to commit sin. Learn your
+              limits before you’re forced to.
+            </li>
+            <li>
+              4. People are innocent until proven guilty. Look for the best in
+              others and you tend to find it.
+            </li>
+            <li>
+              5. There’s no such thing as writers block. Creativity is a skill
+              that needs to be practiced.
+            </li>
+            <li>
+              6. Take every opportunity to speak, lead, and display. If you feel
+              unsure, just fake it till you make it.
+            </li>
+            <li>
+              7. Call your family (doesn’t have to be blood). Remind yourself why
+              you’re doing this.
+            </li>
+            <li>8. Research. I’m not going to tell you what. Figure it out.</li>
+            <li>
+              9. Study abroad. My biggest regret in college is not doing so.
+            </li>
+            <li>
+              10. Take care of your body. We both know you have the time.
+            </li>
           </ol>
-      </section>
+      </motion.section>
     </>
   );
 }

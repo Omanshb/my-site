@@ -19,7 +19,7 @@ const EXPERIENCES: Experience[] = [
   {
     company: "Mercor",
     role: "Member of Technical Staff",
-    description: "RL environments, post-training, and synthetic data",
+    description: "RL environments and synthetic data",
     dates: "June 2026 – Present",
     href: "https://www.mercor.com/",
     logo: "/logos/Mercor.png",

@@ -18,8 +18,14 @@ export const metadata: Metadata = {
   description: "A longer introduction to Omansh Bainsla and his work.",
 };
 
-const ABOUT_TEXT =
-  "I use this page as a slower introduction than the one on the homepage: a place to trace the people, problems, and ideas that have shaped how I work. Most of what I’m drawn to lives at the boundary between research and production, taking fragile theoretical ideas and turning them into systems that survive real users, messy constraints, and the occasional dead laptop.";
+const ABOUT_PARAGRAPHS = [
+  "I believe curiosity, sharpened by rigor, is the most powerful force a person can wield.",
+  "I spend my days trying to understand the systems that hold our world together: how they work, how to improve them, and how they can propel humanity in the right direction.",
+  "I believe every answer, however small, will lead me an inch closer to fulfilling my dharma.",
+  "I move with urgency across every facet of my life, acknowledging how infinitesimally small the odds of every breath I take are.",
+  "I never move alone though. After all, the people beside me are my fuel, compass, and anchor.",
+  "I marvel at the memories I’ve compiled throughout this journey but let there be no confusion: the horizon remains vast, untouched, and ours to chase.",
+];
 
 const ABOUT_IMAGES: RevealImage[] = [
   {
@@ -95,7 +101,7 @@ export default function AboutPage() {
       <TopLeftStatus />
       <TopNav />
 
-      <ScrollRevealText text={ABOUT_TEXT} images={ABOUT_IMAGES} />
+      <ScrollRevealText text={ABOUT_PARAGRAPHS} images={ABOUT_IMAGES} />
       <AboutAccordion items={SECTIONS} />
     </main>
   );
