@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import Image from "next/image";
+import { ChevronDown } from "lucide-react";
 import {
   motion,
   useScroll,
@@ -77,6 +78,8 @@ export function ScrollRevealText({ text, images = [] }: ScrollRevealTextProps) {
     target: targetRef,
     offset: ["start start", "end end"],
   });
+  const { scrollY } = useScroll();
+  const scrollHintOpacity = useTransform(scrollY, [0, 28], [1, 0]);
 
   const paragraphs = Array.isArray(text) ? text : [text];
   const totalChars = paragraphs
@@ -142,6 +145,20 @@ export function ScrollRevealText({ text, images = [] }: ScrollRevealTextProps) {
           </div>
         </div>
       </section>
+
+      <motion.div
+        style={{ opacity: scrollHintOpacity }}
+        animate={{ y: [0, 6, 0] }}
+        transition={{
+          duration: 1.5,
+          ease: "easeInOut",
+          repeat: Infinity,
+        }}
+        className="pointer-events-none fixed inset-x-0 bottom-[15px] z-20 flex justify-center"
+        aria-hidden
+      >
+        <ChevronDown className="h-6 w-6 text-[#525252]" strokeWidth={1.5} />
+      </motion.div>
 
       {images.length > 0 ? (
         <section className="hidden px-6 pb-28 pt-2 md:block xl:hidden">

@@ -469,6 +469,18 @@ export const READINGS: Record<ReadingCategory, ReadingItem[]> = {
       title: "Yann LeCun's $1B Bet Against LLMs",
       href: "https://youtu.be/kYkIdXwW2AE",
     },
+    {
+      title: "adidas Backyard Legends | The Greatest Football Story Ever Told",
+      href: "https://youtu.be/mJJY53qhJe0",
+    },
+    {
+      title: "Rip The Script | Nike Football",
+      href: "https://youtu.be/IyZ1WIua_1s",
+    },
+    {
+      title: "Nike Football - Winner Stays",
+      href: "https://youtu.be/eGUor824a74",
+    },
   ],
   blogs: [
     {
