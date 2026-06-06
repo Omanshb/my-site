@@ -85,7 +85,7 @@ function TextList({ items }: { items: string[] }) {
 }
 
 const SECTIONS: AccordionItem[] = [
-  { id: "experience", label: "Experience", content: <ExperienceRows />, defaultOpen: true },
+  { id: "experience", label: "Experience", content: <ExperienceRows /> },
   { id: "education", label: "Education", content: <EducationCard /> },
   {
     id: "fellowships",

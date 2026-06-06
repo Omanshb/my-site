@@ -4,7 +4,7 @@ import Link from "next/link";
 import { TopLeftStatus } from "@/components/layout/top-left-status";
 import { TopNav } from "@/components/layout/top-nav";
 
-type NotesSection = "writings" | "readings" | "build";
+type NotesSection = "writings" | "readings";
 
 type NotesShellProps = {
   activeSection: NotesSection;
@@ -38,9 +38,9 @@ export function NotesShell({
               }`}
               aria-current={activeSection === "writings" ? "page" : undefined}
             >
-              write
+              produce
             </Link>
-            <span className="text-white/45">, what I </span>
+            <span className="text-white/45"> and what I </span>
             <Link
               href="/notes/readings"
               className={`${linkClassName} ${
@@ -49,16 +49,6 @@ export function NotesShell({
               aria-current={activeSection === "readings" ? "page" : undefined}
             >
               consume
-            </Link>
-            <span className="text-white/45">, and what I </span>
-            <Link
-              href="/notes/build"
-              className={`${linkClassName} ${
-                activeSection === "build" ? "opacity-100" : "opacity-90"
-              }`}
-              aria-current={activeSection === "build" ? "page" : undefined}
-            >
-              build
             </Link>
             <span className="text-white/45">.</span>
           </p>

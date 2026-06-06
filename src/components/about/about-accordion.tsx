@@ -9,12 +9,11 @@ export type AccordionItem = {
   id: string;
   label: string;
   content: ReactNode;
-  defaultOpen?: boolean;
 };
 
 export function AboutAccordion({ items }: { items: AccordionItem[] }) {
   const [openIds, setOpenIds] = useState<string[]>(() =>
-    items.filter((item) => item.defaultOpen).map((item) => item.id),
+    items.map((item) => item.id),
   );
 
   const toggle = (id: string) =>
