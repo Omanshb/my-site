@@ -22,7 +22,7 @@ export default function HomeDitherBackground({
     <div className="fixed inset-0 z-0 overflow-hidden" aria-hidden>
       <DitherShader
         src="/media/images/cityskyline.jpeg"
-        gridSize={3}
+        gridSize={2}
         ditherMode="bayer"
         colorMode="original"
         brightness={-0.12}
