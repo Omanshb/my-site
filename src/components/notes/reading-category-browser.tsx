@@ -230,30 +230,35 @@ export function ReadingCategoryBrowser() {
         <ul>
           {sortedItems.map((item) => {
             const rowClassName =
-              "group grid gap-2 border-b border-white/10 py-4 transition-colors duration-200 sm:grid-cols-[1fr_auto] sm:items-baseline sm:gap-6";
+              "group block transition-colors duration-200";
 
             const rowContent = (
-              <>
-                <p className="text-[21px] leading-tight">
-                  <span className="font-display text-white/85 transition-colors duration-200 group-hover:text-white">
-                    {item.title}
-                  </span>
-                  {item.author ? (
-                    <span className="text-base leading-relaxed text-white/52">
-                      , {item.author}
-                    </span>
-                  ) : null}
-                </p>
+              <div className="relative flex min-h-[3.25rem] min-w-0 items-start py-1 sm:min-h-[4.5rem] sm:items-center sm:py-0">
                 {item.date ? (
-                  <span className="font-notes-section text-[11px] uppercase tracking-[0.12em] text-white/45 sm:text-right">
+                  <span className="absolute right-0 top-1 font-notes-section text-[11px] uppercase tracking-[0.12em] text-white/45 sm:top-0">
                     {item.date}
                   </span>
                 ) : null}
-              </>
+                <div className="min-w-0 pr-14 sm:pr-16">
+                  <p className="text-[21px] leading-tight">
+                    <span className="font-display text-white/85 transition-colors duration-200 group-hover:text-white">
+                      {item.title}
+                    </span>
+                    {item.author ? (
+                      <span className="text-base leading-relaxed text-white/52">
+                        , {item.author}
+                      </span>
+                    ) : null}
+                  </p>
+                </div>
+              </div>
             );
 
             return (
-              <li key={`${activeCategory}-${item.title}`}>
+              <li
+                key={`${activeCategory}-${item.title}`}
+                className="border-b border-white/10 py-4"
+              >
                 {item.href ? (
                   <a
                     href={item.href}

@@ -32,6 +32,8 @@ interface DitherShaderProps {
   backgroundColor?: string;
   /** Object fit behavior */
   objectFit?: "cover" | "contain" | "fill" | "none";
+  /** Focal point for cover/contain, e.g. "40% 65%" */
+  objectPosition?: string;
   /** Threshold bias for dithering (0 to 1) */
   threshold?: number;
   /** Enable animation effect */
@@ -97,6 +99,21 @@ function clamp(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, value));
 }
 
+function parseObjectPosition(value: string): [number, number] {
+  const parts = value.trim().split(/\s+/);
+  const parsePart = (part: string, fallback: number) => {
+    if (!part) return fallback;
+    if (part.endsWith("%")) {
+      return clamp(parseFloat(part) / 100, 0, 1);
+    }
+    return fallback;
+  };
+
+  const x = parsePart(parts[0] ?? "50%", 0.5);
+  const y = parsePart(parts[1] ?? parts[0] ?? "50%", 0.5);
+  return [x, y];
+}
+
 export const DitherShader: React.FC<DitherShaderProps> = ({
   src,
   gridSize = 4,
@@ -111,6 +128,7 @@ export const DitherShader: React.FC<DitherShaderProps> = ({
   contrast = 1,
   backgroundColor = "transparent",
   objectFit = "cover",
+  objectPosition = "50% 50%",
   threshold = 0.5,
   animated = false,
   animationSpeed = 0.02,
@@ -366,26 +384,28 @@ export const DitherShader: React.FC<DitherShaderProps> = ({
       let dx = 0;
       let dy = 0;
 
+      const [focalX, focalY] = parseObjectPosition(objectPosition);
+
       if (objectFit === "cover") {
         const scale = Math.max(displayWidth / iw, displayHeight / ih);
         dw = Math.ceil(iw * scale);
         dh = Math.ceil(ih * scale);
-        dx = Math.floor((displayWidth - dw) / 2);
-        dy = Math.floor((displayHeight - dh) / 2);
+        dx = Math.floor((displayWidth - dw) * focalX);
+        dy = Math.floor((displayHeight - dh) * focalY);
       } else if (objectFit === "contain") {
         const scale = Math.min(displayWidth / iw, displayHeight / ih);
         dw = Math.ceil(iw * scale);
         dh = Math.ceil(ih * scale);
-        dx = Math.floor((displayWidth - dw) / 2);
-        dy = Math.floor((displayHeight - dh) / 2);
+        dx = Math.floor((displayWidth - dw) * focalX);
+        dy = Math.floor((displayHeight - dh) * focalY);
       } else if (objectFit === "fill") {
         dw = displayWidth;
         dh = displayHeight;
       } else {
         dw = iw;
         dh = ih;
-        dx = Math.floor((displayWidth - dw) / 2);
-        dy = Math.floor((displayHeight - dh) / 2);
+        dx = Math.floor((displayWidth - dw) * focalX);
+        dy = Math.floor((displayHeight - dh) * focalY);
       }
 
       offscreen.width = displayWidth;
@@ -449,7 +469,16 @@ export const DitherShader: React.FC<DitherShaderProps> = ({
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [src, dimensions, objectFit, animated, animationSpeed, applyDithering, onReady]);
+  }, [
+    src,
+    dimensions,
+    objectFit,
+    objectPosition,
+    animated,
+    animationSpeed,
+    applyDithering,
+    onReady,
+  ]);
 
   return (
     <div

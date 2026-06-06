@@ -190,6 +190,7 @@ function GalleryScene({
   const [scrollVelocity, setScrollVelocity] = useState(0);
   const [autoPlay, setAutoPlay] = useState(true);
   const lastInteraction = useRef(Date.now());
+  const touchY = useRef<number | null>(null);
 
   const normalizedImages = useMemo(
     () =>
@@ -272,6 +273,31 @@ function GalleryScene({
     [speed],
   );
 
+  const handleTouchStart = useCallback((event: TouchEvent) => {
+    if (event.touches.length !== 1) return;
+    touchY.current = event.touches[0].clientY;
+    setAutoPlay(false);
+    lastInteraction.current = Date.now();
+  }, []);
+
+  const handleTouchMove = useCallback(
+    (event: TouchEvent) => {
+      if (touchY.current === null || event.touches.length !== 1) return;
+      event.preventDefault();
+      const currentY = event.touches[0].clientY;
+      const deltaY = touchY.current - currentY;
+      touchY.current = currentY;
+      setScrollVelocity((prev) => prev + deltaY * 0.05 * speed);
+      setAutoPlay(false);
+      lastInteraction.current = Date.now();
+    },
+    [speed],
+  );
+
+  const handleTouchEnd = useCallback(() => {
+    touchY.current = null;
+  }, []);
+
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
       if (event.key === "ArrowUp" || event.key === "ArrowLeft") {
@@ -290,13 +316,28 @@ function GalleryScene({
   useEffect(() => {
     const canvas = gl.domElement;
     canvas.addEventListener("wheel", handleWheel, { passive: false });
+    canvas.addEventListener("touchstart", handleTouchStart, { passive: true });
+    canvas.addEventListener("touchmove", handleTouchMove, { passive: false });
+    canvas.addEventListener("touchend", handleTouchEnd, { passive: true });
+    canvas.addEventListener("touchcancel", handleTouchEnd, { passive: true });
     document.addEventListener("keydown", handleKeyDown);
 
     return () => {
       canvas.removeEventListener("wheel", handleWheel);
+      canvas.removeEventListener("touchstart", handleTouchStart);
+      canvas.removeEventListener("touchmove", handleTouchMove);
+      canvas.removeEventListener("touchend", handleTouchEnd);
+      canvas.removeEventListener("touchcancel", handleTouchEnd);
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [gl, handleKeyDown, handleWheel]);
+  }, [
+    gl,
+    handleKeyDown,
+    handleWheel,
+    handleTouchStart,
+    handleTouchMove,
+    handleTouchEnd,
+  ]);
 
   useEffect(() => {
     const interval = window.setInterval(() => {

@@ -100,7 +100,7 @@ export function ScrollRevealText({ text, images = [] }: ScrollRevealTextProps) {
             ))}
           </div>
 
-          <div className="relative z-10 mx-auto max-w-3xl translate-y-8 space-y-7 text-center font-display text-[20px] font-[300] leading-[1.45] tracking-tight">
+          <div className="relative z-10 mx-auto max-w-3xl translate-y-4 space-y-5 text-center font-display text-[17px] font-[300] leading-[1.45] tracking-tight min-[400px]:translate-y-6 min-[400px]:space-y-6 min-[400px]:text-[18px] md:translate-y-8 md:space-y-7 md:text-[20px]">
             {paragraphs.map((paragraph, paragraphIndex) => {
               const words = paragraph.split(" ");
 
@@ -136,7 +136,7 @@ export function ScrollRevealText({ text, images = [] }: ScrollRevealTextProps) {
                 </p>
               );
             })}
-            <p className="mt-24 font-signature text-[79px] leading-none text-white">
+            <p className="mt-16 font-signature text-[56px] leading-none text-white min-[400px]:mt-20 min-[400px]:text-[64px] md:mt-24 md:text-[79px]">
               Om
             </p>
           </div>
@@ -144,7 +144,7 @@ export function ScrollRevealText({ text, images = [] }: ScrollRevealTextProps) {
       </section>
 
       {images.length > 0 ? (
-        <section className="px-6 pb-28 pt-2 xl:hidden">
+        <section className="hidden px-6 pb-28 pt-2 md:block xl:hidden">
           <div className="mx-auto max-w-xl columns-1 gap-5 sm:max-w-2xl sm:columns-2">
             {images.map((image) => (
               <motion.figure

@@ -101,16 +101,17 @@ export async function GET() {
       const currentTrackName = currentlyPlaying?.item?.name;
       const currentArtistName = currentlyPlaying?.item?.artists?.[0]?.name;
 
-      if (currentlyPlaying?.is_playing && currentTrackName) {
+      // Paused tracks still live on currently-playing; only fall back when
+      // nothing is loaded in the player (204 / empty body).
+      if (currentTrackName) {
         const payload: SpotifyTrackResponse = {
           song: currentTrackName,
           artist: currentArtistName ?? "",
         };
 
-        return NextResponse.json(
-          payload,
-          { headers: { "Cache-Control": "public, max-age=30, s-maxage=30" } },
-        );
+        return NextResponse.json(payload, {
+          headers: { "Cache-Control": "public, max-age=30, s-maxage=30" },
+        });
       }
     }
 
@@ -122,11 +123,19 @@ export async function GET() {
     });
 
     if (!recentlyPlayedResponse.ok) {
-      throw new Error("Could not load recently played Spotify track.");
+      throw new Error(
+        `Could not load recently played Spotify track (${recentlyPlayedResponse.status}).`,
+      );
     }
 
-    const recentlyPlayed =
-      (await recentlyPlayedResponse.json()) as SpotifyRecentlyPlayedPayload;
+    const recentlyPlayed = await parseJsonSafely<SpotifyRecentlyPlayedPayload>(
+      recentlyPlayedResponse,
+    );
+
+    if (!recentlyPlayed) {
+      throw new Error("No recent Spotify track found.");
+    }
+
     const recentTrackName = recentlyPlayed.items?.[0]?.track?.name;
     const recentArtistName = recentlyPlayed.items?.[0]?.track?.artists?.[0]?.name;
 

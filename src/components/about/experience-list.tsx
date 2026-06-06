@@ -171,15 +171,15 @@ export function ExperienceRows() {
           >
             <Logo experience={experience} />
             <div className="min-w-0 flex-1">
-              <div className="flex items-start justify-between gap-4">
+              <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                 <p className="font-notes-section text-[11px] uppercase tracking-[0.12em] text-white/50 transition-colors duration-500 group-hover:text-[var(--hover-fg-dim)]">
                   {experience.role}
                 </p>
-                <p className="shrink-0 font-notes-section text-[11.5px] uppercase tracking-[0.12em] text-white/50 transition-colors duration-500 group-hover:text-[var(--hover-fg-dim)]">
+                <p className="font-notes-section text-[11px] uppercase tracking-[0.12em] text-white/50 transition-colors duration-500 group-hover:text-[var(--hover-fg-dim)] sm:shrink-0 sm:text-[11.5px]">
                   {experience.dates}
                 </p>
               </div>
-              <h3 className="mt-2 font-display text-[26px] leading-tight text-white/90 transition-colors duration-500 group-hover:text-[var(--hover-fg)]">
+              <h3 className="mt-2 font-display text-[22px] leading-tight text-white/90 transition-colors duration-500 group-hover:text-[var(--hover-fg)] sm:text-[26px]">
                 {experience.company}
               </h3>
               <p className="mt-1.5 text-[14px] text-white/45 transition-colors duration-500 group-hover:text-[var(--hover-fg-dim)]">

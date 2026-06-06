@@ -32,15 +32,33 @@ const paragraphVariants = {
   },
 };
 
-export function HomeHero() {
+interface HomeHeroProps {
+  useFixedLayout?: boolean;
+}
+
+export function HomeHero({ useFixedLayout = false }: HomeHeroProps) {
   return (
     <section
-      className="pointer-events-none fixed inset-0 z-30 max-md:px-6 md:pl-[51%] md:pr-12 lg:pr-16"
+      className={
+        useFixedLayout
+          ? "pointer-events-none fixed inset-0 z-30 pl-[51%] pr-12 lg:pr-16"
+          : "pointer-events-none relative z-10 min-h-[100svh] bg-black px-8 py-10 sm:px-12 sm:py-12 md:px-16"
+      }
       aria-label="Introduction"
     >
-      <div className="h-full max-w-xl pb-12 pr-2 pt-12 text-left md:max-w-[44rem] md:pb-16 md:pr-3 md:pt-24 md:pl-2">
+      <div
+        className={
+          useFixedLayout
+            ? "h-full max-w-[44rem] pb-16 pr-3 pt-28 pl-2 text-left"
+            : "w-full max-w-[42rem] pb-16 pt-18 text-left sm:max-w-[44rem]"
+        }
+      >
         <motion.h1
-          className="font-hero text-[70px] leading-[1.08] tracking-tight text-white"
+          className={`font-hero leading-[1.08] tracking-tight text-white${
+            useFixedLayout
+              ? " text-[42px] min-[400px]:text-[48px] sm:text-[60px] lg:text-[70px]"
+              : " text-[48px] min-[400px]:text-[54px] sm:text-[64px] md:text-[68px]"
+          }`}
           variants={blurReveal}
           initial="hidden"
           animate="visible"
@@ -48,7 +66,11 @@ export function HomeHero() {
           What&apos;s up?
         </motion.h1>
         <motion.h1
-          className="font-hero pl-1 text-[70px] leading-[1.08] tracking-tight text-white"
+          className={`font-hero pl-1 leading-[1.08] tracking-tight text-white${
+            useFixedLayout
+              ? " text-[42px] min-[400px]:text-[48px] sm:text-[60px] lg:text-[70px]"
+              : " text-[48px] min-[400px]:text-[54px] sm:text-[64px] md:text-[68px]"
+          }`}
           variants={blurReveal}
           initial="hidden"
           animate="visible"
@@ -57,7 +79,7 @@ export function HomeHero() {
           I&apos;m Omansh Bainsla,
         </motion.h1>
         <motion.div
-          className="mt-6 max-w-[42rem] space-y-5 pl-1 text-pretty text-sm font-[250] leading-relaxed text-white/90 md:max-w-[44rem] md:text-base md:leading-relaxed"
+          className={`mt-6 space-y-5 pl-1 text-pretty text-[16px] font-[250] leading-relaxed text-white/90${useFixedLayout ? " max-w-[44rem]" : " max-w-none"}`}
           variants={paragraphContainerVariants}
           initial="hidden"
           animate="visible"
@@ -74,7 +96,7 @@ export function HomeHero() {
           To all of the remarkable people who I&apos;ve had the opportunity to surround myself with, I&apos;m perpetually grateful for you all. If you&apos;re among the hundreds more that are yet to come, reach out.
           </motion.p>
           <motion.div variants={paragraphVariants} className="pt-2">
-            <SocialLinks className="pointer-events-auto text-sm font-[500] leading-relaxed md:text-base" />
+            <SocialLinks className="pointer-events-auto text-base font-[500] leading-relaxed" />
           </motion.div>
         </motion.div>
       </div>

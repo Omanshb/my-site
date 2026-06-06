@@ -71,7 +71,7 @@ const HONORS = [
 
 function TextList({ items }: { items: string[] }) {
   return (
-    <ul className="space-y-2.5 px-5">
+    <ul className="space-y-2.5 px-5 pb-4">
       {items.map((item) => (
         <li
           key={item}

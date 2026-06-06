@@ -13,7 +13,7 @@ const AFFILIATION_ROWS: { name: string; href: string }[][] = [
 
 export function EducationCard() {
   return (
-    <div className="group grid items-center gap-10 px-5 md:grid-cols-[1fr_auto] md:gap-14">
+    <div className="group grid items-center gap-10 px-5 pb-2 md:grid-cols-[1fr_auto] md:gap-14">
       <div className="order-2 md:order-1">
         <p className="font-notes-section text-[11.5px] uppercase tracking-[0.12em] text-white/50">
           2023 – 2026

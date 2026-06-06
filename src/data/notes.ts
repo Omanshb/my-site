@@ -46,10 +46,6 @@ export const READING_CATEGORIES: {
   { id: "movies", label: "Movies" },
 ];
 
-export type ThoughtItem = {
-  statement: string;
-};
-
 export const WRITINGS: WritingItem[] = [
   {
     slug: "earning-my-goodbyes",
@@ -370,10 +366,10 @@ export const READINGS: Record<ReadingCategory, ReadingItem[]> = {
       href: "https://www.goodreads.com/book/show/5470.1984",
     },
     {
-      title: "Elon Musk",
-      author: "Walter Isaacson",
-      date: "2023",
-      href: "https://www.goodreads.com/book/show/125277346-elon-musk",
+      title: "Zero to One",
+      author: "Peter Thiel",
+      date: "2014",
+      href: "https://www.goodreads.com/book/show/18050143-zero-to-one",
     },
     {
       title: "The Great Gatsby",
@@ -1470,12 +1466,4 @@ export const MOVIES: MovieItem[] = [
     href: "https://boxd.it/jrdI",
     poster: "https://a.ltrbxd.com/resized/film-poster/4/6/3/2/8/7/463287-stree-0-500-0-750-crop.jpg?v=cab354d43d",
   },
-];
-
-export const THOUGHTS: ThoughtItem[] = [
-  { statement: "Distribution without craft is noise." },
-  { statement: "Clarity is a competitive advantage." },
-  { statement: "Taste is built, not inherited." },
-  { statement: "A good product should teach itself." },
-  { statement: "Momentum is usually an interface problem first." },
 ];

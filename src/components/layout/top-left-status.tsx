@@ -10,6 +10,8 @@ import {
 import { FaGithub } from "react-icons/fa";
 import { useEffect, useState } from "react";
 
+import { FUN_FACTS } from "@/data/fun-facts";
+
 const SF_TIME_FORMATTER = new Intl.DateTimeFormat("en-US", {
   timeZone: "America/Los_Angeles",
   hour: "numeric",
@@ -18,7 +20,16 @@ const SF_TIME_FORMATTER = new Intl.DateTimeFormat("en-US", {
   hour12: true,
 });
 
-type DisplayMode = "time" | "spotify" | "github" | "quote";
+// On small screens we drop the seconds so the clock stays fully readable
+// instead of colliding with (or truncating beside) the compact nav.
+const SF_TIME_FORMATTER_COMPACT = new Intl.DateTimeFormat("en-US", {
+  timeZone: "America/Los_Angeles",
+  hour: "numeric",
+  minute: "2-digit",
+  hour12: true,
+});
+
+type DisplayMode = "time" | "spotify" | "github" | "fact";
 
 type SpotifyTrackResponse = {
   song: string;
@@ -80,11 +91,11 @@ const EMPTY_GITHUB_DAYS: GithubContributionDay[] = Array.from(
   }),
 );
 
-const QUOTES = [
-  "Comparison is the thief of joy."
-];
+const MODE_ORDER: DisplayMode[] = ["time", "spotify", "github", "fact"];
 
-const MODE_ORDER: DisplayMode[] = ["time", "spotify", "github", "quote"];
+function pickRandomFactIndex() {
+  return Math.floor(Math.random() * FUN_FACTS.length);
+}
 
 const CONTRIBUTION_GREEN_EMPTY = "#161b22";
 const CONTRIBUTION_GREEN_MIN = { r: 14, g: 68, b: 41 };
@@ -149,7 +160,7 @@ function ModeIcon({ mode }: { mode: DisplayMode }) {
   );
 }
 
-function wrapQuoteLines(text: string, maxCharsPerLine: number) {
+function wrapFactLines(text: string, maxCharsPerLine: number) {
   const words = text.trim().split(/\s+/);
   if (!words.length) return [text];
 
@@ -187,21 +198,31 @@ export function TopLeftStatus() {
   const [githubDays, setGithubDays] = useState<GithubContributionDay[]>(
     EMPTY_GITHUB_DAYS,
   );
-  const [quoteIndex] = useState(QUOTES.length - 1);
+  const [factIndex, setFactIndex] = useState(pickRandomFactIndex);
+  const [isCompact, setIsCompact] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 767px)");
+    const update = () => setIsCompact(mediaQuery.matches);
+    update();
+    mediaQuery.addEventListener("change", update);
+    return () => mediaQuery.removeEventListener("change", update);
+  }, []);
 
   useEffect(() => {
     // Set on the client only; rendering the clock during SSR would mismatch
     // the time captured a few seconds earlier on the server.
-    setCurrentTime(SF_TIME_FORMATTER.format(new Date()));
+    const formatter = isCompact ? SF_TIME_FORMATTER_COMPACT : SF_TIME_FORMATTER;
+    setCurrentTime(formatter.format(new Date()));
 
     const interval = window.setInterval(() => {
-      setCurrentTime(SF_TIME_FORMATTER.format(new Date()));
+      setCurrentTime(formatter.format(new Date()));
     }, 1000);
 
     return () => {
       window.clearInterval(interval);
     };
-  }, []);
+  }, [isCompact]);
 
   useEffect(() => {
     const cachedTrack = readCachedSpotifyTrack();
@@ -299,6 +320,12 @@ export function TopLeftStatus() {
     };
   }, [mode]);
 
+  useEffect(() => {
+    if (mode === "fact") {
+      setFactIndex(pickRandomFactIndex());
+    }
+  }, [mode]);
+
   const currentModeIndex = MODE_ORDER.indexOf(mode);
   const prevMode =
     MODE_ORDER[(currentModeIndex - 1 + MODE_ORDER.length) % MODE_ORDER.length];
@@ -311,7 +338,7 @@ export function TopLeftStatus() {
         ? "latest Spotify song"
         : prevMode === "github"
           ? "last 14 days of GitHub contributions"
-        : "inspirational quote";
+        : "fun fact";
 
   const nextModeLabel =
     nextMode === "time"
@@ -320,18 +347,18 @@ export function TopLeftStatus() {
         ? "latest Spotify song"
         : nextMode === "github"
           ? "last 14 days of GitHub contributions"
-        : "inspirational quote";
+        : "fun fact";
 
-  const currentQuote = QUOTES[quoteIndex] ?? QUOTES[0];
-  const quoteLines = wrapQuoteLines(currentQuote, 60);
+  const currentFact = FUN_FACTS[factIndex] ?? FUN_FACTS[0];
+  const factLines = wrapFactLines(currentFact, 60);
 
   return (
     <div
-      className={`fixed left-6 top-4 z-20 flex md:left-8 md:top-6 ${
-        mode === "quote" ? "items-start" : "h-7 items-center"
+      className={`fixed left-3 top-4 z-20 flex sm:left-5 md:left-8 md:top-6 ${
+        mode === "fact" ? "items-start" : "h-7 items-center"
       }`}
     >
-      <div className="-ml-1.5 mr-2 flex h-7 shrink-0 items-center gap-1">
+      <div className="-ml-1.5 mr-1 flex h-7 shrink-0 items-center gap-0.5 sm:mr-2 sm:gap-1">
         <button
           type="button"
           className="inline-flex h-4 w-4 translate-y-[0.5px] items-center justify-center text-[#555555] transition-colors duration-200 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/60"
@@ -356,8 +383,8 @@ export function TopLeftStatus() {
         </button>
       </div>
       <p
-        className={`max-w-[45vw] font-nav text-[14px] tracking-[0.02em] text-white ${
-          mode === "quote"
+        className={`max-w-[44vw] font-nav text-[12px] tracking-[0.02em] text-white sm:text-[13px] md:max-w-[45vw] md:text-[14px] ${
+          mode === "fact"
             ? "whitespace-normal pt-[4px] leading-5"
             : mode === "github"
               ? "overflow-visible whitespace-nowrap"
@@ -378,7 +405,7 @@ export function TopLeftStatus() {
         )}
         {mode === "github" && (
           <span
-            className="inline-flex items-center gap-[3px] overflow-visible"
+            className="inline-flex items-center gap-[2px] overflow-visible sm:gap-[3px]"
             aria-label="Last 14 days of GitHub contributions"
           >
             {(() => {
@@ -397,7 +424,7 @@ export function TopLeftStatus() {
                     className="group relative inline-block shrink-0"
                   >
                     <span
-                      className="block h-[10px] w-[10px] cursor-default rounded-none"
+                      className="block h-[7px] w-[7px] cursor-default rounded-none sm:h-[10px] sm:w-[10px]"
                       style={{
                         backgroundColor: getContributionGreen(
                           day.count,
@@ -421,16 +448,14 @@ export function TopLeftStatus() {
             })()}
           </span>
         )}
-        {mode === "quote" && (
-          <span className="italic">
-            &quot;
-            {quoteLines.map((line, index) => (
+        {mode === "fact" && (
+          <span>
+            {factLines.map((line, index) => (
               <span key={`${line}-${index}`}>
                 {index > 0 ? <br /> : null}
                 {line}
               </span>
             ))}
-            &quot;
           </span>
         )}
       </p>

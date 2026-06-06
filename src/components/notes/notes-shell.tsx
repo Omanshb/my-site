@@ -26,7 +26,7 @@ export function NotesShell({
       <TopNav />
       <main className="mx-auto w-full max-w-3xl px-6 pb-24 pt-24 sm:px-8 sm:pt-28">
         <header className="border-b border-white/15 pb-7">
-          <h1 className="font-hero text-[46px] leading-[0.98] text-white md:text-[56px]">
+          <h1 className="font-hero text-[38px] leading-[0.98] text-white sm:text-[46px] md:text-[56px]">
             Notes
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/52 md:text-lg">

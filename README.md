@@ -1,18 +1,11 @@
 # my-site
 
-Personal website scaffold — Next.js (App Router), TypeScript, and Tailwind CSS. Ready to deploy on [Vercel](https://vercel.com).
+Personal website — Next.js (App Router), TypeScript, and Tailwind CSS.
 
 ## Develop
 
-Install dependencies (once):
-
 ```bash
 npm install
-```
-
-Run the dev server:
-
-```bash
 npm run dev
 ```
 
@@ -25,17 +18,14 @@ npm run build
 npm start
 ```
 
-## Deploy on Vercel
+## Routes
 
-1. Push this repo to GitHub (or GitLab / Bitbucket).
-2. In the [Vercel dashboard](https://vercel.com/new), **Import** the repository.
-3. Vercel detects **Next.js** — use the default build settings and deploy.
+- `/` — home
+- `/about` — about
+- `/media` — photo gallery
+- `/notes/writings` — writings
+- `/notes/readings` — reading list
 
-You can also use the CLI: `npx vercel` from the project root (install the [Vercel CLI](https://vercel.com/docs/cli) if needed).
+## Deploy
 
-## Project layout
-
-- `src/app/` — routes (`/`, `/about`, `/projects`)
-- `src/components/` — `SiteHeader`, `SiteFooter`
-
-Replace placeholder copy (e.g. “Your Name”, links, tagline) with your own content.
+Push to GitHub and import the repo in the [Vercel dashboard](https://vercel.com/new), or run `npx vercel` from the project root.
