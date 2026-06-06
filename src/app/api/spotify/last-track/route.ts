@@ -2,52 +2,67 @@ import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
-const TOKEN_ENDPOINT = "https://accounts.spotify.com/api/token";
-const CURRENTLY_PLAYING_ENDPOINT =
+const TOKEN_URL = "https://accounts.spotify.com/api/token";
+const NOW_PLAYING_URL =
   "https://api.spotify.com/v1/me/player/currently-playing";
-const RECENTLY_PLAYED_ENDPOINT =
+const RECENT_URL =
   "https://api.spotify.com/v1/me/player/recently-played?limit=1";
 
-type SpotifyTrackPayload = {
-  item?: {
-    name?: string;
-    artists?: Array<{
-      name?: string;
-    }>;
-  };
-  is_playing?: boolean;
+const CACHE_TTL_MS = 60_000;
+const RECENT_MIN_INTERVAL_MS = 60_000;
+
+type Track = { song: string; artist: string };
+
+type SpotifyState = {
+  accessToken: string | null;
+  tokenExpiresAt: number;
+  track: Track | null;
+  fetchedAt: number;
+  recentBlockedUntil: number;
+  inflight: Promise<Track | null> | null;
 };
 
-type SpotifyRecentlyPlayedPayload = {
-  items?: Array<{
-    track?: {
-      name?: string;
-      artists?: Array<{
-        name?: string;
-      }>;
+function state(): SpotifyState {
+  const g = globalThis as typeof globalThis & { __spotify?: SpotifyState };
+  if (!g.__spotify) {
+    g.__spotify = {
+      accessToken: null,
+      tokenExpiresAt: 0,
+      track: null,
+      fetchedAt: 0,
+      recentBlockedUntil: 0,
+      inflight: null,
     };
-  }>;
-};
-
-type SpotifyTrackResponse = {
-  song: string;
-  artist: string;
-};
-
-async function parseJsonSafely<T>(response: Response): Promise<T | null> {
-  if (response.status === 204) return null;
-
-  const body = await response.text();
-  if (!body.trim()) return null;
-
-  try {
-    return JSON.parse(body) as T;
-  } catch {
-    return null;
   }
+  return g.__spotify;
 }
 
-async function getSpotifyAccessToken() {
+function retryAfterMs(response: Response, fallbackMs: number) {
+  const header = response.headers.get("Retry-After");
+  if (!header) return fallbackMs;
+
+  const seconds = Number.parseInt(header, 10);
+  if (Number.isFinite(seconds) && seconds > 0) {
+    return seconds * 1000;
+  }
+
+  return fallbackMs;
+}
+
+function json(track: Track | null, maxAge = 60) {
+  const body = track ?? { song: "", artist: "" };
+  return NextResponse.json(body, {
+    headers: {
+      "Cache-Control": `public, max-age=${maxAge}, s-maxage=${maxAge}`,
+    },
+  });
+}
+
+async function getAccessToken(s: SpotifyState): Promise<string> {
+  if (s.accessToken && Date.now() < s.tokenExpiresAt - 60_000) {
+    return s.accessToken;
+  }
+
   const clientId = process.env.SPOTIFY_CLIENT_ID;
   const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
   const refreshToken = process.env.SPOTIFY_REFRESH_TOKEN;
@@ -56,14 +71,10 @@ async function getSpotifyAccessToken() {
     throw new Error("Missing Spotify environment variables.");
   }
 
-  const basicToken = Buffer.from(`${clientId}:${clientSecret}`).toString(
-    "base64",
-  );
-
-  const response = await fetch(TOKEN_ENDPOINT, {
+  const response = await fetch(TOKEN_URL, {
     method: "POST",
     headers: {
-      Authorization: `Basic ${basicToken}`,
+      Authorization: `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString("base64")}`,
       "Content-Type": "application/x-www-form-urlencoded",
     },
     body: new URLSearchParams({
@@ -77,83 +88,94 @@ async function getSpotifyAccessToken() {
     throw new Error("Could not refresh Spotify access token.");
   }
 
-  const json = (await response.json()) as { access_token?: string };
-  if (!json.access_token) {
+  const payload = (await response.json()) as {
+    access_token?: string;
+    expires_in?: number;
+  };
+
+  if (!payload.access_token) {
     throw new Error("Spotify token response missing access token.");
   }
-  return json.access_token;
+
+  s.accessToken = payload.access_token;
+  s.tokenExpiresAt = Date.now() + (payload.expires_in ?? 3600) * 1000;
+  return payload.access_token;
+}
+
+function parseTrack(data: {
+  item?: { name?: string; artists?: Array<{ name?: string }> };
+}): Track | null {
+  const song = data.item?.name?.trim();
+  if (!song) return null;
+  return { song, artist: data.item?.artists?.[0]?.name?.trim() ?? "" };
+}
+
+async function fetchTrack(s: SpotifyState): Promise<Track | null> {
+  const token = await getAccessToken(s);
+
+  const nowPlaying = await fetch(NOW_PLAYING_URL, {
+    headers: { Authorization: `Bearer ${token}` },
+    cache: "no-store",
+  });
+
+  if (nowPlaying.status !== 429 && nowPlaying.ok && nowPlaying.status !== 204) {
+    const data = (await nowPlaying.json()) as Parameters<typeof parseTrack>[0];
+    const track = parseTrack(data);
+    if (track) return track;
+  }
+
+  if (Date.now() < s.recentBlockedUntil) {
+    return s.track;
+  }
+
+  const recent = await fetch(RECENT_URL, {
+    headers: { Authorization: `Bearer ${token}` },
+    cache: "no-store",
+  });
+
+  if (recent.status === 429) {
+    s.recentBlockedUntil =
+      Date.now() + retryAfterMs(recent, RECENT_MIN_INTERVAL_MS);
+    return s.track;
+  }
+
+  if (!recent.ok) {
+    return s.track;
+  }
+
+  s.recentBlockedUntil = Date.now() + RECENT_MIN_INTERVAL_MS;
+
+  const data = (await recent.json()) as {
+    items?: Array<{ track?: Parameters<typeof parseTrack>[0]["item"] }>;
+  };
+
+  const item = data.items?.[0]?.track;
+  return item ? parseTrack({ item }) : s.track;
 }
 
 export async function GET() {
+  const s = state();
+
+  if (Date.now() - s.fetchedAt < CACHE_TTL_MS) {
+    return json(s.track);
+  }
+
+  if (!s.inflight) {
+    s.inflight = fetchTrack(s).finally(() => {
+      s.inflight = null;
+    });
+  }
+
   try {
-    const accessToken = await getSpotifyAccessToken();
-
-    const currentlyPlayingResponse = await fetch(CURRENTLY_PLAYING_ENDPOINT, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-      cache: "no-store",
-    });
-
-    if (currentlyPlayingResponse.ok) {
-      const currentlyPlaying =
-        await parseJsonSafely<SpotifyTrackPayload>(currentlyPlayingResponse);
-      const currentTrackName = currentlyPlaying?.item?.name;
-      const currentArtistName = currentlyPlaying?.item?.artists?.[0]?.name;
-
-      // Paused tracks still live on currently-playing; only fall back when
-      // nothing is loaded in the player (204 / empty body).
-      if (currentTrackName) {
-        const payload: SpotifyTrackResponse = {
-          song: currentTrackName,
-          artist: currentArtistName ?? "",
-        };
-
-        return NextResponse.json(payload, {
-          headers: { "Cache-Control": "public, max-age=30, s-maxage=30" },
-        });
-      }
+    const track = await s.inflight;
+    s.fetchedAt = Date.now();
+    if (track) {
+      s.track = track;
     }
-
-    const recentlyPlayedResponse = await fetch(RECENTLY_PLAYED_ENDPOINT, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-      cache: "no-store",
-    });
-
-    if (!recentlyPlayedResponse.ok) {
-      throw new Error(
-        `Could not load recently played Spotify track (${recentlyPlayedResponse.status}).`,
-      );
-    }
-
-    const recentlyPlayed = await parseJsonSafely<SpotifyRecentlyPlayedPayload>(
-      recentlyPlayedResponse,
-    );
-
-    if (!recentlyPlayed) {
-      throw new Error("No recent Spotify track found.");
-    }
-
-    const recentTrackName = recentlyPlayed.items?.[0]?.track?.name;
-    const recentArtistName = recentlyPlayed.items?.[0]?.track?.artists?.[0]?.name;
-
-    if (!recentTrackName) {
-      throw new Error("No recent Spotify track found.");
-    }
-
-    const payload: SpotifyTrackResponse = {
-      song: recentTrackName,
-      artist: recentArtistName ?? "",
-    };
-
-    return NextResponse.json(
-      payload,
-      { headers: { "Cache-Control": "public, max-age=30, s-maxage=30" } },
-    );
+    return json(track ?? s.track);
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: "Spotify unavailable." }, { status: 503 });
+    s.fetchedAt = Date.now();
+    return json(s.track);
   }
 }

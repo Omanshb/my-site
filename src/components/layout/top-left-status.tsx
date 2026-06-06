@@ -60,7 +60,7 @@ const LOADING_SPOTIFY_TRACK = {
 };
 
 const SPOTIFY_CACHE_KEY = "top-left-status:spotify-track";
-const SPOTIFY_POLL_INTERVAL_MS = 30_000;
+const SPOTIFY_POLL_INTERVAL_MS = 60_000;
 
 function readCachedSpotifyTrack(): SpotifyTrackCacheEntry | null {
   try {
