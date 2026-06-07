@@ -3,9 +3,14 @@ const SOCIAL = {
   github: "https://github.com/omanshb",
   x: "https://x.com/bainslaomansh",
   instagram: "https://www.instagram.com/omansh.b/",
+  cal: "https://cal.com/omansh-bainsla/chat",
+  gmail:
+    "https://mail.google.com/mail/?view=cm&fs=1&to=omansh.bainsla@gmail.com",
 } as const;
 
 const ITEMS = [
+  { label: "Meeting", href: SOCIAL.cal },
+  { label: "Email", href: SOCIAL.gmail },
   { label: "LinkedIn", href: SOCIAL.linkedin },
   { label: "Github", href: SOCIAL.github },
   { label: "X", href: SOCIAL.x },
