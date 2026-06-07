@@ -90,7 +90,7 @@ export function HomeHero({ useFixedLayout = false }: HomeHeroProps) {
           I’m primarily devoted to taking the theoretical research ideas I read about and forging them into systems that thrive in the real world. More recently, this has led me to work on security infrastructure for enterprise AI at Triage and agent evaluation frameworks at Salesforce. 
           </motion.p>
           <motion.p variants={paragraphVariants}>
-          When my laptop dies, you’ll see me outside trying to catch the perfect photo, unwinding with a round of golf, or pretending to be a movie critic. Lately, I’ve also been writing more to keep my imagination exercised and pin down the thoughts that would otherwise slip away.
+          When my laptop dies, you’ll see me outside trying to catch the perfect photo, unwinding with a round of golf, or pretending to be a movie critic. I’ve also been writing more to keep my imagination exercised and pin down the thoughts that would otherwise slip away.
           </motion.p>
           <motion.p variants={paragraphVariants}>
           To all of the remarkable people who I&apos;ve had the opportunity to surround myself with, I&apos;m perpetually grateful for you all. If you&apos;re among the hundreds more that are yet to come, reach out.

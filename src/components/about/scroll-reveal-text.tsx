@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import { ChevronDown } from "lucide-react";
+import { ArrowDown } from "lucide-react";
 import {
   motion,
   useScroll,
@@ -148,16 +148,26 @@ export function ScrollRevealText({ text, images = [] }: ScrollRevealTextProps) {
 
       <motion.div
         style={{ opacity: scrollHintOpacity }}
-        animate={{ y: [0, 6, 0] }}
+        animate={{ y: [0, 5, 0] }}
         transition={{
-          duration: 1.5,
+          duration: 2,
           ease: "easeInOut",
           repeat: Infinity,
         }}
-        className="pointer-events-none fixed inset-x-0 bottom-[15px] z-20 flex justify-center"
-        aria-hidden
+        className="pointer-events-none fixed inset-x-0 bottom-6 z-20 flex justify-center"
+        aria-label="Scroll down"
+        role="img"
       >
-        <ChevronDown className="h-6 w-6 text-[#525252]" strokeWidth={1.5} />
+        <div className="flex flex-col items-center gap-2">
+          <span className="font-nav text-[10px] uppercase tracking-[0.28em] text-[#525252]">
+            Scroll
+          </span>
+          <ArrowDown
+            aria-hidden
+            className="h-3.5 w-3.5 text-[#525252]/70"
+            strokeWidth={1.5}
+          />
+        </div>
       </motion.div>
 
       {images.length > 0 ? (
