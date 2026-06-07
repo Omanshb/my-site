@@ -127,7 +127,6 @@ export const FUN_FACTS = [
   "Owls can't move their eyeballs.",
   "Bats are the only mammals that truly fly.",
   "The inventor of the frisbee was turned into a frisbee after he died.",
-  "Cereal was invented to stop people from masturbating. Seriously.",
   "The first product with a barcode was Wrigley's gum.",
   "The average pencil can draw a line 35 miles long.",
   "A penny costs more than a cent to make.",
