@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import {
   displayFont,
   heroFont,
@@ -32,6 +33,7 @@ export default function RootLayout({
         className={`${sansFont.variable} ${displayFont.variable} ${heroFont.variable} ${navFont.variable} ${notesSectionFont.variable} ${signatureFont.variable} min-h-screen antialiased`}
       >
         {children}
+        <Analytics />
       </body>
     </html>
   );
