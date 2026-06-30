@@ -45,7 +45,7 @@ const EXPERIENCES: Experience[] = [
     company: "Salesforce",
     role: "Software Engineering Intern",
     description: "Agent evaluation and benchmarking",
-    dates: "April 2025 – August 2025",
+    dates: "May 2025 – August 2025",
     href: "https://www.salesforce.com/",
     logo: "/logos/salesforce.png",
     logoType: "vector",
