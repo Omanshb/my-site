@@ -41,16 +41,16 @@ export function HomeHero({ useFixedLayout = false }: HomeHeroProps) {
     <section
       className={
         useFixedLayout
-          ? "pointer-events-none fixed inset-0 z-30 pl-[51%] pr-12 lg:pr-16"
-          : "pointer-events-none relative z-10 min-h-[100svh] bg-black px-8 py-10 sm:px-12 sm:py-12 md:px-16"
+          ? "pointer-events-none fixed inset-0 z-30 flex flex-col justify-center pl-[51%] pr-12 lg:pr-16"
+          : "pointer-events-none relative z-10 flex min-h-[100svh] flex-col justify-center bg-black px-8 py-10 sm:px-12 sm:py-12 md:px-16"
       }
       aria-label="Introduction"
     >
       <div
         className={
           useFixedLayout
-            ? "h-full max-w-[44rem] pb-16 pr-3 pt-28 pl-2 text-left"
-            : "w-full max-w-[42rem] pb-16 pt-18 text-left sm:max-w-[44rem]"
+            ? "max-w-[44rem] pr-3 pl-2 text-left"
+            : "w-full max-w-[42rem] text-left sm:max-w-[44rem]"
         }
       >
         <motion.h1
