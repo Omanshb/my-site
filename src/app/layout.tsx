@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import {
   displayFont,
@@ -17,6 +17,10 @@ export const metadata: Metadata = {
     template: "%s · Omansh Bainsla",
   },
   description: "Software engineer based in San Francisco, CA.",
+};
+
+export const viewport: Viewport = {
+  themeColor: "#000000",
 };
 
 export default function RootLayout({
